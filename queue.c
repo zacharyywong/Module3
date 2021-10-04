@@ -6,24 +6,82 @@
 #include <stdbool.h>
 
 /* the queue representation is hidden from users of the module */
-typedef void queue_t;		
+typedef void queue_t{
+	//int size = 0;
+	//pointers to front and back 
+	//void *front;
+	//	void *back;
+}
 
-/* create an empty queue */
-queue_t* qopen(void);
+struct queue{
+	void *front;
+	void *back;
+
+} queue_t;
+// pointers to front and back
+//static void *front;
+//static void *back;
+
+/* create an empty queue 
+ *return the front pointer 
+ */
+queue_t* qopen(void){
+	front = NULL;
+	return *front;
+}
 
 /* deallocate a queue, frees everything in it */
-void qclose(queue_t *qp);   
+void qclose(queue_t *qp){
+	free(qp);
+}
 
 /* put element at the end of the queue
  * returns 0 is successful; nonzero otherwise 
  */
-int32_t qput(queue_t *qp, void *elementp); 
+int32_t qput(queue_t *qp, void *elementp){
+
+	//void *front;
+	//void *back;
+
+	//make element the front
+	if (qp == NULL){
+	 qp -> front = elementp;
+	 qp -> back = elementp;
+	}
+	//put the element in the back
+	else{
+		qp -> back -> next = elementp;
+		qp -> back = elementp;
+	}
+	return 0;
+
+}
 
 /* get the first first element from queue, removing it from the queue */
-void* qget(queue_t *qp);
+void* qget(queue_t *qp){
+	void *got;
+
+	// store front in temporary pointer to return later 
+	got = qp -> front;
+
+	//make the original front equal to the orginal front element next element
+	qp -> front = qp -> front -> next;
+
+	// return the original front element through got pointer
+	return *got;
+
+}
 
 /* apply a function to every element of the queue */
-void qapply(queue_t *qp, void (*fn)(void* elementp));
+void qapply(queue_t *qp, void (*fn)(void* elementp)){
+	void *currentElement;
+
+	// make current Element equal to the specific queue's front element
+	for (currentElement= qp -> front; currentElement!=NULL; currentElement=currentElement->next){
+		fn(currentElement);
+	}
+
+}
 
 /* search a queue using a supplied boolean function
  * skeyp -- a key to search for
@@ -34,6 +92,16 @@ void qapply(queue_t *qp, void (*fn)(void* elementp));
  *          -- returns TRUE or FALSE as defined in bool.h
  * returns a pointer to an element, or NULL if not found
  */
+static bool searchfn(void* elementp, const void* keyp){
+
+	// compare addresses of the two elements 
+	if(elementp == keyp){
+		return(TRUE);
+	}else{
+		return(FALSE);
+	}
+
+}
 void* qsearch(queue_t *qp, 
 							bool (*searchfn)(void* elementp,const void* keyp),
 							const void* skeyp);

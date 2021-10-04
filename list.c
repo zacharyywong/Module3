@@ -18,7 +18,7 @@ adaption/manual copy of list1.c by Zachary J. Wong
 #define MAXREG 10
 
 /*the representation of the car */
-/*struct car {
+/* typedef struct car {
   struct car *next;
   char plate[MAXREG];
   double price;
