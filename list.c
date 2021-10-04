@@ -1,6 +1,6 @@
 /* list.c
 
-Author: Zachary J. Wong, Foster Burnley, Mikaela O'Brien, Camden Parker
+author: Zachary J. Wong, Foster Burnley, Mikaela O'Brien, Camden Parker
 
 10/1/2021
 
