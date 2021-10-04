@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 /* ltest.c
  * first test of list implimentation by Zach Wong
+=======
+/* /bin/Module3/ltest.c
+ * first test of list implimentation by Zach Wong trying edits Mik
+>>>>>>> d3e401b5704a036c019c39058cc4a8675ff00cc9
  *
  */
 
