@@ -1,4 +1,4 @@
-/* /bin/Module3/ltest.c
+/* ltest.c
  * first test of list implimentation by Zach Wong
  *
  */
