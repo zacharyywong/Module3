@@ -14,7 +14,7 @@
 
 
 /*
- * Make a car 
+ * Make a car NEW EDIT MIK TESTING
  */
 car_t* make_car(char* platep, int year, double price){
   car_t* cp;
