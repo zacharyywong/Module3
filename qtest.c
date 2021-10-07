@@ -49,19 +49,20 @@ person_t* make_person(char* name, int age, int gradYear){
 
 /*
  * print the data of the person type
- * return 0 if successful
+ * return if successful
  */
-int print_person(person_t *pp){
-	person_t *np;
-
-	if ((pp->next) != NULL){
-		np = pp->next;
-		printf("name: %s, age = %d, gradyear = %d, next person: %s \n\n", pp->name, pp->age, pp->gradYear, np->name);
-	}
-	else{
-		printf("name: %s, age = %d, gradyear = %d, next: end of list \n\n", pp->name, pp->age, pp->gradYear); 
-	}
-	return 0;
+void print_person(void *vp){
+  person_t * np;
+  person_t * pp;
+  pp = (person_t *) &vp;
+  if ((pp->next) != NULL){
+    np = pp->next;
+    printf("name: %s, age = %d, gradyear = %d, next person: %s \n\n", pp->name, pp->age, pp->gradYear, np->name);
+  }
+  else{
+    printf("name: %s, age = %d, gradyear = %d, next: end of list \n\n", pp->name, pp->age, pp->gradYear); 
+  }
+  return;
 }
 
 /*
@@ -89,7 +90,7 @@ static bool searchfn(void* elementp, const void* keyp){
 
 int main(){
 	queue_t *queue1; 
-  queue_t *queue2;
+	queue_t *queue2;
 
 	person_t *blank1;
 	person_t *blank2;
@@ -113,8 +114,8 @@ int main(){
 	//put function
 	queue2 = qopen();
 	qput(queue2, cam);                                                         
-  qput(queue2, sarah);                                                       
-  qput(queue2, billie);
+	qput(queue2, sarah);                                                       
+	qput(queue2, billie);
 	qapply(queue2, print_person); //print on another 3 person list
 
 	// get function
@@ -128,7 +129,7 @@ int main(){
 	print_person(blank1);
 		
 	//search for sarah (not present);
-  blank2 = (person_t*)qsearch(queue1, searchfn, sarah);
+	blank2 = (person_t*)qsearch(queue1, searchfn, sarah);
 	print_person(blank2);
 
 	// search for sarah (present);
