@@ -20,7 +20,6 @@
 
 
 typedef struct person {                                                       
-  struct person *next;                                                         
   char name[MAXREG];                                                   
   int age;                                                               
   int gradYear;                                                                   
@@ -39,10 +38,11 @@ person_t* make_person(char* name, int age, int gradYear){
 		return NULL;
 	}
 	//fill in data
-	pp ->next = NULL;
+	
 	strcpy(pp->name, name);
 	pp->age = age;
 	pp->gradYear = gradYear;
+	printf("testing print name %s, age %d, gradYear %d \n\n", pp->name, pp->age, pp->gradYear);
 	return pp;
 
 }
@@ -52,16 +52,9 @@ person_t* make_person(char* name, int age, int gradYear){
  * return if successful
  */
 void print_person(void *vp){
-  person_t * np;
-  person_t * pp;
-  pp = (person_t *) &vp;
-  if ((pp->next) != NULL){
-    np = pp->next;
-    printf("name: %s, age = %d, gradyear = %d, next person: %s \n\n", pp->name, pp->age, pp->gradYear, np->name);
-  }
-  else{
-    printf("name: %s, age = %d, gradyear = %d, next: end of list \n\n", pp->name, pp->age, pp->gradYear); 
-  }
+	person_t* pp;
+	pp=(person_t*) vp;
+  printf("name: %s, age = %d, gradyear = %d \n\n", pp->name, pp->age, pp->gradYear);
   return;
 }
 
@@ -69,14 +62,14 @@ void print_person(void *vp){
  * print the specific elements in the queue
  * return 0 if successful
  */
-int print_queue (char* name_pointer, queue_t *qp){
+/*int print_queue (char* name_pointer, queue_t *qp){
 	person_t *p;
 	printf("queue name: %s \n", name_pointer);
 	for (p = qp; p!=NULL; p=p->next){
 		print_person(p);
 	}
 	return 0;
-}
+	}*/
 
 static bool searchfn(void* elementp, const void* keyp){                        
                                                                              
@@ -105,11 +98,11 @@ int main(){
 
 	// open/apply/put functions
 	queue1 = qopen();
-	qapply(queue1, print_person); //print on empty list
+	qapply(queue1,print_person); //print on empty list
 	qput(queue1, zach);
 	qput(queue1, foster);
 	qput(queue1, mikaela);
-	qapply(queue1, print_person); //print on 3 person list
+	qapply(queue1,print_person); //print on 3 person list
 
 	//put function
 	queue2 = qopen();
@@ -121,8 +114,8 @@ int main(){
 	// get function
 	blank1 = (person_t*)qget(queue1);
 	blank2 = (person_t*)qget(queue2);
-	print_queue("queue1", queue1);
-	print_queue("queue2", queue2);
+	//print_queue("queue1", queue1);
+	//print_queue("queue2", queue2);
 	
 	// search for foster (present)
 	blank1 = (person_t*)qsearch(queue1, searchfn, foster);
@@ -138,16 +131,16 @@ int main(){
 
 	//remove
 	blank1 = (person_t*)qremove(queue1, searchfn, mikaela);
-	print_queue("queue1", queue1);
+	//print_queue("queue1", queue1);
 	
 	blank2 = (person_t*)qremove(queue2, searchfn, sarah);
-	print_queue("queue2", queue2);
+	//print_queue("queue2", queue2);
 
 	//concat
 
 	qconcat(queue1, queue2);
-	print_queue("queue1", queue1);
-	print_queue("queue2", queue2);
+	//print_queue("queue1", queue1);
+	//print_queue("queue2", queue2);
 
 	//close 
 	qclose(queue1);

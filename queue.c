@@ -10,7 +10,7 @@
 #include <string.h>                                                            
 #include <inttypes.h>  
 
-
+//#define DEBUG
 
 /* the queue representation is hidden from users of the module */
 typedef void queue_t;
@@ -47,6 +47,16 @@ queue_t* qopen(void){
 	return (queue_t*)rp;
 }
 
+#ifdef DEBUG
+typedef struct person{
+	char name[10];
+	int age;
+	int gradYear;
+  printf("print person in queue.c: name %s, age %d, gradyear %d", name, age, gradYear);
+} person_t;
+#endif
+	
+
 /* deallocate a queue, frees everything in it */
 void qclose(queue_t *qp){
 	qp = (queue_i*)qp;
@@ -59,21 +69,24 @@ void qclose(queue_t *qp){
 int32_t qput(queue_t *qp, void *elementp){
 	queue_i* rp;
 	rp = (queue_i*) qp;
-	elementp = (element_i*) elementp;
+	element_i* elementp_i;
+	elementp_i = (element_i*) elementp;
 	
 	//void *front;
 	//void *back;
 
 	//make element the front
 	if (rp->front == NULL){
-	 rp->front = elementp;
-	 rp->back = elementp;
+	 rp->front = elementp_i;
+	 rp->back = elementp_i;
 	}
 	//put the element in the back
 	else{
-		rp -> back -> next = elementp;
-		rp -> back = elementp;
+		rp -> back -> next = elementp_i;
+		rp -> back = elementp_i;
+		rp -> back -> next = NULL;
 	}
+	//	printf("testing in qput, %
 	return 0;
 
 }
