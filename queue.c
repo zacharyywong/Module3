@@ -78,6 +78,7 @@ static void fillDataArr(element_i *elementp_i, element_i *elementp_t){
 int32_t qput(queue_t *qp, void *elementp){
   queue_i* rp;
 	rp = (queue_i*) qp;
+<<<<<<< HEAD
 
  	element_i* elementp_i;
 	element_i* elementp_t=NULL;
@@ -93,6 +94,14 @@ int32_t qput(queue_t *qp, void *elementp){
 	
 	// fill in data
 	//fillDataArr(elementp_i, elementp_t);
+=======
+	element_i* elementp_i;
+	
+	// need to allocate memory for the actual element object that is going into the queue
+	elementp_i = (element_i*)(malloc(sizeof(elementp)));
+	//elementp_i = (element_i*) elementp;
+	elementp_i = elementp;
+>>>>>>> 458c85372ccf74983db43fb9a59e6d2565ad26bf
 	
 	/*
 	//copy array into new array of size 2 times greater, free old array, nd 
