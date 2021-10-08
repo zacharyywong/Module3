@@ -20,15 +20,16 @@
 
 
 typedef struct person {                                                       
-  struct person *next;                                                         
   char name[MAXREG];                                                   
-  int age;                                                               
-  int gradYear;                                                                   
+   int age;                                                               
+   int gradYear;
+	//int fav;
+	//int age;
 } person_t;
 
 
 person_t* make_person(char* name, int age, int gradYear){
-	person_t* pp;
+	person_t* pp=NULL;
 
 	pp=(person_t*)malloc(sizeof(person_t));
 	// fail case
@@ -39,43 +40,42 @@ person_t* make_person(char* name, int age, int gradYear){
 		return NULL;
 	}
 	//fill in data
-	pp ->next = NULL;
 	strcpy(pp->name, name);
+	//strcpy(pp->gradYear, gradYear);
+	//	strcpy(pp->fav, fav); 
 	pp->age = age;
 	pp->gradYear = gradYear;
+	//pp -> fav = fav;
+	//	printf("testing print name %s, gradYear %d, fav %d, age %d \n\n", pp->name, pp->gradYear, pp->fav, pp->age);
+	//printf("make person name %s, age %d \n\n", pp->name, pp->age); 
 	return pp;
 
 }
 
 /*
  * print the data of the person type
- * return 0 if successful
+ * return if successful
  */
-int print_person(person_t *pp){
-	person_t *np;
-
-	if ((pp->next) != NULL){
-		np = pp->next;
-		printf("name: %s, age = %d, gradyear = %d, next person: %s \n\n", pp->name, pp->age, pp->gradYear, np->name);
-	}
-	else{
-		printf("name: %s, age = %d, gradyear = %d, next: end of list \n\n", pp->name, pp->age, pp->gradYear); 
-	}
-	return 0;
+void print_person(void *vp){
+	person_t* pp;
+	pp=(person_t*) vp;
+	//  printf("name: %s, gradYear = %d, fav = %d, age = %d \n\n", pp->name, pp->gradYear, pp->fav, pp->age);
+	printf("name %s, age %d, gradYear %d \n\n", pp->name, pp->age, pp->gradYear);
+ 
 }
 
 /*
  * print the specific elements in the queue
  * return 0 if successful
  */
-int print_queue (char* name_pointer, queue_t *qp){
+/*int print_queue (char* name_pointer, queue_t *qp){
 	person_t *p;
 	printf("queue name: %s \n", name_pointer);
 	for (p = qp; p!=NULL; p=p->next){
 		print_person(p);
 	}
 	return 0;
-}
+	}*/
 
 static bool searchfn(void* elementp, const void* keyp){                        
                                                                              
@@ -88,47 +88,59 @@ static bool searchfn(void* elementp, const void* keyp){
 }  
 
 int main(){
-	queue_t *queue1; 
-  queue_t *queue2;
+	queue_t* queue1; 
+	//queue_t *queue2;
 
-	person_t *blank1;
-	person_t *blank2;
-	person_t *blank3;
-	
+	//person_t *blank1;
+	//person_t *blank2;
+	//person_t *blank3;
+
+
 	person_t *zach = make_person("zach", 20, 2023);
-	person_t *foster = make_person("foster", 22, 2022);
-	person_t *mikaela = make_person("mikaela", 23, 2021);
-	person_t *cam = make_person("cam", 50, 2024);
-	person_t *sarah = make_person("sarah", 23, 2021);
-	person_t *billie = make_person("billie", 19, 2026);
+	person_t *foster = make_person("foster", 22, 2022); 
+	 //	person_t *zach = make_person("zach", 2023, 100, 20);
+	 //	person_t *foster = make_person("foster", 2022, 101, 22);
+	person_t *mikaela = make_person("mikaela", 2021, 2021);
+	person_t *cam = make_person("cam", 2024, 2050);
+	person_t *sarah = make_person("sarah", 2021, 2019);
+	person_t *billie = make_person("billie", 2026, 2026);
 
 	// open/apply/put functions
 	queue1 = qopen();
-	qapply(queue1, print_person); //print on empty list
-	qput(queue1, zach);
-	qput(queue1, foster);
-	qput(queue1, mikaela);
+	//	qapply(queue1,print_person); //print on empty list
+	//printf("print before putting in queue \n");                                                                                                                                                
+	//  print_person((void*)zach);
+	qput(queue1, (void*)zach);
+	//printf("print first queue \n"); 
+	//	print_person((void*)zach);
+ 	qput(queue1, (void*)foster);
+  qput(queue1, (void*)mikaela);
+	 qput(queue1, (void*)cam);
+	  qput(queue1, (void*)sarah);
+		 qput(queue1, (void*)billie); 
+	printf("print first queue \n");
 	qapply(queue1, print_person); //print on 3 person list
-
+	qclose(queue1);
+	/*
 	//put function
 	queue2 = qopen();
 	qput(queue2, cam);                                                         
-  qput(queue2, sarah);                                                       
-  qput(queue2, billie);
+	qput(queue2, sarah);                                                       
+	qput(queue2, billie);
 	qapply(queue2, print_person); //print on another 3 person list
-
+	
 	// get function
 	blank1 = (person_t*)qget(queue1);
 	blank2 = (person_t*)qget(queue2);
-	print_queue("queue1", queue1);
-	print_queue("queue2", queue2);
+	//print_queue("queue1", queue1);
+	//print_queue("queue2", queue2);
 	
 	// search for foster (present)
 	blank1 = (person_t*)qsearch(queue1, searchfn, foster);
 	print_person(blank1);
 		
 	//search for sarah (not present);
-  blank2 = (person_t*)qsearch(queue1, searchfn, sarah);
+	blank2 = (person_t*)qsearch(queue1, searchfn, sarah);
 	print_person(blank2);
 
 	// search for sarah (present);
@@ -137,18 +149,18 @@ int main(){
 
 	//remove
 	blank1 = (person_t*)qremove(queue1, searchfn, mikaela);
-	print_queue("queue1", queue1);
+	//print_queue("queue1", queue1);
 	
 	blank2 = (person_t*)qremove(queue2, searchfn, sarah);
-	print_queue("queue2", queue2);
+	//print_queue("queue2", queue2);
 
 	//concat
 
 	qconcat(queue1, queue2);
-	print_queue("queue1", queue1);
-	print_queue("queue2", queue2);
+	//print_queue("queue1", queue1);
+	//print_queue("queue2", queue2);
 
 	//close 
 	qclose(queue1);
-	
+	*/
 }

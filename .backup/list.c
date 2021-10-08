@@ -123,7 +123,11 @@ car_t *lremove(char *platep){
   for (p=front; p!=NULL; p=p->next){
     //compare plates
     if (strcmp(p->plate,platep)==0){
+      if (p == front){ // edge case where removing first element in the list
+	front = p -> next;
+      }else{
       f->next = p->next; //remove p
+      }
       return p;
     }
     //update

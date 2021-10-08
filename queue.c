@@ -1,6 +1,6 @@
 
 /* 
- * queue.c -- public interface to the queue module
+ * queue.c -- create a reusable queue module 
  */
 
 #include <queue.h>                                                             
@@ -20,9 +20,9 @@ typedef void queue_t;
  * internal representation of queue
  */
 typedef struct elementstruct{
-	void *data1;
-	void *data2;
-	void *data3;
+	void *data; // an elementstruct 
+	//	void *data2;
+	//void *data3;
 	//void *arr[COUNT];
 	//for (int i = 0; i < COUNT; i++){
 	//	*arr[i] = data;
@@ -78,10 +78,10 @@ static void fillDataArr(element_i *elementp_i, element_i *elementp_t){
 int32_t qput(queue_t *qp, void *elementp){
   queue_i* rp;
 	rp = (queue_i*) qp;
-<<<<<<< HEAD
+
 
  	element_i* elementp_i;
-	element_i* elementp_t=NULL;
+	element_i* elementp_t;
 	//	element_i *elementp_t; 
 	//	element_i *elementp_t;
 	//	elementp = 0;
@@ -93,15 +93,14 @@ int32_t qput(queue_t *qp, void *elementp){
 	elementp_t = (element_i*)elementp;
 	
 	// fill in data
-	//fillDataArr(elementp_i, elementp_t);
-=======
-	element_i* elementp_i;
+	//fillDataArr(elementp_i, elementp_t
+
 	
 	// need to allocate memory for the actual element object that is going into the queue
-	elementp_i = (element_i*)(malloc(sizeof(elementp)));
+
 	//elementp_i = (element_i*) elementp;
-	elementp_i = elementp;
->>>>>>> 458c85372ccf74983db43fb9a59e6d2565ad26bf
+
+
 	
 	/*
 	//copy array into new array of size 2 times greater, free old array, nd 
@@ -113,9 +112,7 @@ int32_t qput(queue_t *qp, void *elementp){
 	}
 	*/
 	//	elementp_i ->arr[i] = elementp_t ->arr[i];
-	elementp_i ->data1 = elementp_t ->data1;
-	elementp_i ->data2 = elementp_t ->data2;
-	elementp_i ->data3 = elementp_t ->data3;
+	elementp_i ->data = elementp_t;
 	elementp_i ->next = NULL;
 	//elementp_t = elementp_i;
 	
@@ -177,11 +174,13 @@ void* qget(queue_t *qp){
 /* apply a function to every element of the queue */
 void qapply(queue_t *qp, void (*fn)(void* elementp)){
 	element_i* currentElement;
+	void* currentElementV; 
 	queue_i *rp;
 	rp = (queue_i*) qp;
 	// make current Element equal to the specific queue's front element
 	for (currentElement= rp -> front; currentElement!=NULL; currentElement=currentElement->next){
-		fn((void*)currentElement);
+		currentElementV = currentElement -> data;
+		fn(currentElementV);
 	}
 
 }
