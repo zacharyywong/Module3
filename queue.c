@@ -70,7 +70,11 @@ int32_t qput(queue_t *qp, void *elementp){
 	queue_i* rp;
 	rp = (queue_i*) qp;
 	element_i* elementp_i;
-	elementp_i = (element_i*) elementp;
+	
+	// need to allocate memory for the actual element object that is going into the queue
+	elementp_i = (element_i*)(malloc(sizeof(elementp)));
+	//elementp_i = (element_i*) elementp;
+	elementp_i = elementp;
 	
 	//void *front;
 	//void *back;
