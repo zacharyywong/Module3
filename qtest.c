@@ -72,19 +72,6 @@ void print_person(void *vp){
  
 }
 
-/*
- * print the specific elements in the queue
- * return 0 if successful
- */
-/*int print_queue (char* name_pointer, queue_t *qp){
-	person_t *p;
-	printf("queue name: %s \n", name_pointer);
-	for (p = qp; p!=NULL; p=p->next){
-		print_person(p);
-	}
-	return 0;
-	}*/
-
 static bool searchfn(void* elementp, const void* keyp){                        
                                                                              
   // compare addresses of the two elements                                    
@@ -99,8 +86,8 @@ int main(){
 	queue_t *queue1; 
 	queue_t *queue2;
 
-	//person_t *blank1;
-	//person_t *blank2;
+	person_t *blank1;
+	person_t *blank2;
 	//person_t *blank3;
 
 
@@ -115,20 +102,20 @@ int main(){
 
 	// open/apply/put functions
 	queue1 = qopen();
-	//	qapply(queue1,print_person); //print on empty list
+	//qapply(queue1,print_person); //print on empty list
 	//printf("print before putting in queue \n");                                                                                                                                                
-	//  print_person((void*)zach);
+	// print_person((void*)zach);
 	qput(queue1, (void*)zach);
 	//printf("print first queue \n"); 
-	//	print_person((void*)zach);
+	//print_person((void*)zach);
  	qput(queue1, (void*)foster);
-  qput(queue1, (void*)mikaela);
+	qput(queue1, (void*)mikaela);
 	qput(queue1, (void*)cam);
 	//qput(queue1, (void*)sarah);
-	//	 qput(queue1, (void*)billie); 
+	//qput(queue1, (void*)billie); 
 	printf("print first queue \n");
 	qapply(queue1, print_person); //print on 3 person list
-	//	qclose(queue1);
+	//qclose(queue1);
 	
 	//put function
 	queue2 = qopen();
@@ -137,39 +124,38 @@ int main(){
 	qput(queue2, (void*)billie);
 	printf("print second queue \n");
 	qapply(queue2, print_person); //print on another 3 person list
-	/*
+	
 	// get function
 	blank1 = (person_t*)qget(queue1);
 	blank2 = (person_t*)qget(queue2);
-	//print_queue("queue1", queue1);
-	//print_queue("queue2", queue2);
-	
+	printf("print queue1 after using qget()\n");
+	qapply(queue1, print_person);
+	printf("print queue2 after using qget()\n");
+	qapply(queue2, print_person);
+		
 	// search for foster (present)
 	blank1 = (person_t*)qsearch(queue1, searchfn, foster);
-	print_person(blank1);
+	//print_person(blank1);
 		
-	//search for sarah (not present);
+	//search for sarah (present);
 	blank2 = (person_t*)qsearch(queue1, searchfn, sarah);
-	print_person(blank2);
-
-	// search for sarah (present);
-	blank3 = (person_t*)qsearch(queue2, searchfn, billie);
-	print_person(blank3);
+	//print_person(blank2);
 
 	//remove
 	blank1 = (person_t*)qremove(queue1, searchfn, mikaela);
-	//print_queue("queue1", queue1);
-	
+	printf("print queue1 after removing mikaela\n");
+	qapply(queue1, print_person);
+		
 	blank2 = (person_t*)qremove(queue2, searchfn, sarah);
-	//print_queue("queue2", queue2);
-
+	printf("print queue2 after removing sarah\n");
+	qapply(queue2, print_person);
+	
 	//concat
-
 	qconcat(queue1, queue2);
-	//print_queue("queue1", queue1);
-	//print_queue("queue2", queue2);
-
+	printf("print concatenated queue\n");
+	qapply(queue1, print_person);
+	
 	//close 
 	qclose(queue1);
-	*/
+	
 }
