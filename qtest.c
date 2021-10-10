@@ -88,8 +88,7 @@ int main(){
 
 	person_t *blank1;
 	person_t *blank2;
-	//person_t *blank3;
-
+	person_t *blank3;
 
 	person_t *zach = make_person("zach", 20, 2023, 500);
 	person_t *foster = make_person("foster", 22, 2022, 501); 
@@ -135,12 +134,22 @@ int main(){
 		
 	// search for foster (present)
 	blank1 = (person_t*)qsearch(queue1, searchfn, foster);
+	printf("Person found after searching for foster\n");
 	//print_person(blank1);
-		
+	printf("blank1 name is %s\n",blank1->name);
+	
 	//search for sarah (present);
-	blank2 = (person_t*)qsearch(queue1, searchfn, sarah);
+	blank2 = (person_t*)qsearch(queue2, searchfn, sarah);
+	printf("Person found after searching for sarah\n");
 	//print_person(blank2);
+	printf("blank2 name is %s\n",blank2->name);
 
+	//search for mikaela (not present in queue2);
+	blank3 = (person_t*)qsearch(queue2, searchfn, mikaela);
+	printf("Person found after searching for mikaela\n");
+	//print_person(blank3);
+	printf("blank3 name is %s\n",blank3->name);
+	
 	//remove
 	blank1 = (person_t*)qremove(queue1, searchfn, mikaela);
 	printf("print queue1 after removing mikaela\n");
