@@ -11,6 +11,7 @@
 
 #define MAXREG 10
 
+//#include <queue.c>
 #include <queue.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -58,6 +59,11 @@ person_t* make_person(char* name, int age, int gradYear, int fav){
  */
 
 void print_person(void *vp){
+	if (vp == NULL){
+		printf("person not found \n\n");
+		return;
+		
+	}
 	person_t* pp1;
 	//person_t* pp2;
 	pp1=(person_t*) vp;
@@ -72,15 +78,14 @@ void print_person(void *vp){
  
 }
 
-static bool searchfn(void* elementp, const void* keyp){                        
-                                                                             
-  // compare addresses of the two elements                                    
-  if(elementp == keyp){                                                       
-    return(true);                                                             
-  }else{                                                                      
-    return(false);                                                            
-  }                                                                           
-}  
+static bool searchfn(void* elementp, const void* keyp){                                                                             
+// compare the two elements                                    
+	 if(elementp == keyp){                                                       
+		 return(true);                                                             
+	   }else{                                                                      
+	  return(false);                                                            
+	 }                                                                           
+}
 
 int main(){
 	queue_t *queue1; 
@@ -133,32 +138,37 @@ int main(){
 	qapply(queue2, print_person);
 		
 	// search for foster (present)
-	blank1 = (person_t*)qsearch(queue1, searchfn, foster);
+	blank1 = (person_t*)qsearch(queue1, searchfn, (void*)foster);
 	printf("Person found after searching for foster\n");
 	//print_person(blank1);
-	printf("blank1 name is %s\n",blank1->name);
-	
+	print_person((void*)(blank1));
+		
 	//search for sarah (present);
 	blank2 = (person_t*)qsearch(queue2, searchfn, sarah);
 	printf("Person found after searching for sarah\n");
 	//print_person(blank2);
-	printf("blank2 name is %s\n",blank2->name);
-
+	print_person((void*)(blank2));
+	
 	//search for mikaela (not present in queue2);
 	blank3 = (person_t*)qsearch(queue2, searchfn, mikaela);
-	printf("Person found after searching for mikaela\n");
+	printf("Person found after searching for mikaela\n\n");
 	//print_person(blank3);
-	printf("blank3 name is %s\n",blank3->name);
+	print_person((void*)(blank3));
 	
 	//remove
 	blank1 = (person_t*)qremove(queue1, searchfn, mikaela);
 	printf("print queue1 after removing mikaela\n");
 	qapply(queue1, print_person);
-		
+	
 	blank2 = (person_t*)qremove(queue2, searchfn, sarah);
 	printf("print queue2 after removing sarah\n");
 	qapply(queue2, print_person);
 	
+	// remove billie from queue 2
+	blank2 = (person_t*)qremove(queue2, searchfn, billie);                      
+  printf("print queue2 after removing billie\n");                              
+  qapply(queue2, print_person); 
+	/*
 	//concat
 	qconcat(queue1, queue2);
 	printf("print concatenated queue\n");
@@ -166,5 +176,5 @@ int main(){
 	
 	//close 
 	qclose(queue1);
-	
+	*/
 }

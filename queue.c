@@ -60,6 +60,7 @@ typedef struct person{
 	
 
 /* deallocate a queue, frees everything in it */
+
 void qclose(queue_t *qp){
 	qp = (queue_i*)qp;
 	free(qp);
@@ -167,7 +168,7 @@ void* qget(queue_t *qp){
 
 	// return the original front element through got pointer
 	
-	return (void*) got;
+	return got->data;
 
 }
 
@@ -203,22 +204,55 @@ void qapply(queue_t *qp, void (*fn)(void* elementp)){
 //		return(FALSE);
 //	}
 //}
+/*
+static bool searchfn(void* elementp, const void* keyp){
+	element_i* elementp_i = NULL;
+	element_i* elementp_t = NULL;
+	element_i* elementp_i1 = NULL;
+	element_i* elementp_k = NULL;
 
+	// put the element and key into two different element structs and fill in the element struct's data accordingly
+	elementp_t = (element_i*) elementp;
+	elementp_i1 = (element_i*)keyp;
+	
+	elementp_i->data = elementp_t;
+	elementp_k->data = elementp_i1;
+	
+	
+  // compare addresses of the two elements                                                
+  if(elementp_i -> data  == elementp_k -> data){                                                           
+    return(true);                                                                       
+  }else{                                                                                
+    return(false);                                                                      
+  }                                                                                      
+} 
+*/
+static bool searchfn(void* elementp, const void* keyp){                        
+                                                                                
+// compare the two elements                                                     
+   if(elementp == keyp){                                                        
+     return(true);                                                              
+     }else{                                                                                                                                               
+    return(false);                                                              
+   }                                                                            
+}   
 void* qsearch(queue_t *qp, 
 							bool (*searchfn)(void* elementp,const void* keyp),
 							const void* skeyp){
 	element_i *p;
+	//	element_i *p_i;
 	bool result;
   queue_i *rp = (queue_i*) qp; 
 	// for loop to go through each element in the list
 	for (p = rp->front; p != NULL; p=p->next){
-
+		//put in the data of the current element, skeyp should only be the data already
+		//p_i->data = p->data;
 		//compare elements in helper function
-		result = searchfn(p, skeyp);
+		result = searchfn(p->data, skeyp);
 
 		//stop after finding a match
 		if (result){
-			return (void*)p;
+			return (void*)p->data;
 		}
 	}
 	//if no match in the whole list 
@@ -241,13 +275,19 @@ void* qremove(queue_t *qp,
 	queue_i *rp  = (queue_i*) qp; 
 
 	for (p = rp->front; p != NULL; p=p->next){
-		result = searchfn(p, skeyp);
+		result = searchfn(p->data, skeyp);
 
 		//remove p if match found
 		if (result){
 			got=p;
-			prev->next = p->next;
-			return (void*)got;
+			//check if p is front 
+			if (p == rp->front){	
+			rp ->front = p->next;
+			}
+			else{
+				prev ->next = p ->next;
+			}
+			return (void*)got->data;
 		}
 
 		// update back pointer
