@@ -1,4 +1,4 @@
-/* 
+https://www.instagram.com/luftyrileyg/?hl=en/* 
  * hash.c -- implements a generic hash table as an indexed set of queues.
  *
  */
@@ -17,8 +17,8 @@
 //internal represenation of a hash table:
 typedef struct elementstruct{//not too confident about this but think we need it for opening it...
   void *data; //could be a queue or any other data
-  char *key; 
-  
+  char *key;
+   
 } element_i;
 
 typedef struct hashstruct{
@@ -108,3 +108,25 @@ void hclose(hashtable_t *htp){
   free(hh); //free table itself
 }
 
+// hput -- puts an entry into a hash table under designated key
+// returns 0 for sucess; nonzero otherwise
+
+int32_t hput(hashtable_t *htp, void *ep, const char *key, int keylen){
+  uint32_t loc;
+  queue_t*qp;
+  hashtable_i*hh=htp;
+  element_i*elep;
+  loc = SuperFastHash(key, keylen, hh->hsize);
+  if (hh->slots[loc]!=NULL){//in the case that this is the first element at this location in the table
+    qp = qopen;
+    hh->slots[loc]=qp;
+    elep->key = key;
+    elep->data = ep;
+    qput(qp, elep);
+  }else{//if there is an existing
+    qp = hh->slots[loc];//retrieve pointer to existing queue
+    elep->key = key;//put key and data into element structure
+    elep->data = ep;
+    qput(qp, elep);//put completed element structure into exisiting queue
+  }
+}
