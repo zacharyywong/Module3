@@ -1,6 +1,6 @@
 
 /* 
- * queue.c -- create a reusable queue module 
+ * queue.c -- create a reusable queue module //
  */
 
 #include <queue.h>                                                             

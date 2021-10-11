@@ -7,8 +7,12 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-#include "queue.h"
-#include "hash.h"
+#include <queue.h>
+#include <hash.h>
+#include <queue.c>
+
+#define MAXCHAR 10
+#define MAXARR 100
 
 /* 
  * SuperFastHash() -- produces a number between 0 and the tablesize-1.
@@ -20,16 +24,18 @@
  */
 #define get16bits(d) (*((const uint16_t *) (d)))
 
+typedef void hashtable_t; /* representation of a hashtable hidden */ 
 //internal represenation of a hash table:
 typedef struct elementstruct{//not too confident about this but think we need it for opening it...
   void *data; //can handle any sort of data
-  char *key;
+  char key[MAXCHAR];
 } element_i;
+
 
 typedef struct hashstruct{
   uint32_t hsize; //size of table as determined by argument from hopen
   uint32_t length; //number of elements in the hash table
-  queue_t* slots;// hash slots--> this is an array
+  queue_t *slots[MAXARR];// hash slots--> this is an array
   
 } hashtable_i;
 
@@ -79,21 +85,27 @@ static uint32_t SuperFastHash (const char *data,int len,uint32_t tablesize) {
 
 hashtable_t *hopen(uint32_t hsize){
   hashtable_i* hh;
-  hh = (hashtable_i*)malloc(hh);// allocate memory for internal represenation of table
+  hh = (hashtable_i*)malloc(sizeof(hh));// allocate memory for internal represenation of table
   if(hh == NULL){
     free(hh);
     return NULL;
   }
   hh->hsize = hsize; 
   hh->length = 0;
-
+	//queue_t* slots [hsize]; //declare array
+	//hh -> slots = slots; 
   //allocate memory for the array of entries
-  hh->slots = calloc(hsize, sizeof(queue_t));
-  if(hh->slots == NULL){
-    free(hh);
-    return NULL;
-  }
-  return (hashtable_t*)hh;
+	// size of hh->slots is size of queue_t*
+	//for (int i = 0; i < hh->hsize; i++){
+	//	hh->slots[i] = qopen();
+	//}
+	//hh->slots = (queue_t*)calloc(hh->hsize, sizeof());
+	//hh ->slots = slots;
+  //if(hh->slots == NULL){
+  //  free(hh);
+  //  return NULL;
+  //}
+  return hh;
 }
 
 
@@ -103,13 +115,14 @@ void hclose(hashtable_t *htp){
   hashtable_i*hh=(hashtable_i*)htp;
   // free any allocated keys
   for(uint32_t i = 0; i < hh->hsize; i++){
-    if (hh->slots[i] != NULL){
-      printf("deleting: %s",hh->slots[i]);//for testing purposes
-      free((void*)hh->slots[i]);
+    //if (hh->slots[i] != NULL){
+		printf("deleting: %p",hh->slots[i]);//for testing purposes (prints pointer address)
+      //free((void*)hh->slots[i]);
+		qclose(hh->slots[i]);
     }
-  }
+  
   // free entire array of slots
-  free(hh->slots);
+  //free(hh->slots);
   free(hh); //free table itself
 }
 
@@ -120,24 +133,24 @@ int32_t hput(hashtable_t *htp, void *ep, const char *key, int keylen){
   uint32_t loc;
   queue_t*qp;
   hashtable_i*hh = (hashtable_i*)htp;
-  element_i*elep;
+  element_i*elep = NULL;
   loc = SuperFastHash(key, keylen, hh->hsize);
   if (hh->slots[loc]!=NULL){//in the case that this is the first element at this location in the table
     qp = qopen();
     hh->slots[loc]=qp;
-    elep->key = key;
+    strcpy(elep->key, key);
     elep->data = ep;
     qput(qp, elep);
     hh->length+=1;
   }else{//if there is an existing
     qp = hh->slots[loc];//retrieve pointer to existing queue
-    elep->key = key;//put key and data into element structure
+    strcpy(elep->key, key);//put key and data into element structure
     elep->data = ep;
     qput(qp, elep);//put completed element structure into exisiting queue
     hh->length+=1;
   }
   if(hh->slots[loc] != qp) return 1; //check that queue in proper part of the table
-  if(qsearch(qp, searchfn, elep) == NULL) return 1; //utilize search functionality of queue to check for success
+  //if(qsearch(qp, searchfn, elep) == NULL) return 1; //utilize search functionality of queue to check for success
   return 0; //if it makes it thru the above checks --> success
 }
 
@@ -170,7 +183,7 @@ void *hsearch(hashtable_t *htp, bool (*searchfn)(void* elementp, const void* sea
   uint32_t loc;
   hashtable_i*hh = (hashtable_i*)htp;
   queue_t*qp;//pointer to the queue to be searched
-  void *target;//original fed output of qsearch into this but no longer, not deleting yet incase we need it
+  //void *target;//original fed output of qsearch into this but no longer, not deleting yet incase we need it
   loc = SuperFastHash(key, keylen, hh->hsize); //run hash function so don't have to search entire array, just find location
   qp = hh->slots[loc];
   return qsearch(qp, hsearchfn, (void*)key);
@@ -189,7 +202,7 @@ void *hremove(hashtable_t *htp, bool (*searchfn)(void* elementp, const void* sea
   uint32_t loc;
   hashtable_i*hh = (hashtable_i*)htp;
   queue_t*qp;//pointer to the queue to be searched
-  void *target;
+  //void *target;
   loc = SuperFastHash(key, keylen, hh->hsize); //run hash function so don't have to search entire array, just find location
   qp = hh->slots[loc];
   return qremove(qp, hsearchfn, (void*)key);

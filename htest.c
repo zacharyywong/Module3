@@ -1,4 +1,4 @@
-/* qtest.c --- 
+/* htest.c --- 
  * 
  * 
  * Author: Zachary J. Wong
@@ -10,9 +10,11 @@
  */
 
 #define MAXREG 10
+#define HASHSIZE 10
 
 //#include <queue.c>
 #include <queue.h>
+#include <hash.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -89,8 +91,18 @@ static bool searchfn(void* elementp, const void* keyp){
 
 int main(){
   person_t*steve = make_person("Steve", 50, 1999, 3);
-  hashtable_t*hash = hopen();
+	person_t*elise = make_person("elise", 80, 1963, 8);                            person_t*mike = make_person("mike", 53, 1963, 15);
+	//person_t*pam = make_person("pam", 45, 1980, 30);
+	//person_t*tom = make_person("tom", 30, 1990, 25);
+  //person_t*jess = make_person("jess", 25, 2000, 17);                                           
 
-  
+  hashtable_t* hash1 = hopen(HASHSIZE);
+	//print on empty hashtable
+	happly(hash1, print_person);
+	hput(hash1, (void*)(steve), "steve", 5);
+	hput(hash1, (void*)(elise), "elise", 5);
+	hput(hash1, (void*)mike, "mike", 4);
+	happly(hash1, print_person); 
+   
 
 }

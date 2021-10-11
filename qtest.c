@@ -6,7 +6,7 @@
  * Version: 
  * 
  * Description: A test of queue.c 
- * 
+ * qtest 
  */
 
 #define MAXREG 10
