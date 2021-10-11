@@ -119,7 +119,7 @@ void hclose(hashtable_t *htp){
 int32_t hput(hashtable_t *htp, void *ep, const char *key, int keylen){
   uint32_t loc;
   queue_t*qp;
-  hashtable_i*hh=htp;
+  hashtable_i*hh = (hashtable_i*)htp;
   element_i*elep;
   loc = SuperFastHash(key, keylen, hh->hsize);
   if (hh->slots[loc]!=NULL){//in the case that this is the first element at this location in the table
@@ -142,5 +142,55 @@ int32_t hput(hashtable_t *htp, void *ep, const char *key, int keylen){
 }
 
 
+// happly -- applies a function to every entry in the hash table
 
+void happly(hashtable_t *htp, void(*fn)(void*ep)){
+  hashtable_i*hh = (hashtable_i*)htp;
+  uint32_t loc;
+  for(loc=0;loc<=hh->hsize;loc++) qapply(hh->slots[loc], fn);
+}
 
+//hsearch -- searchs for an entry under a designated key using a
+//designated search fn -- returns a pointer to the entry or NULL if not found
+//need to modify the search function because the elements of these queues
+//will have a data field and a key field
+
+static bool hsearchfn(void *elementp, const void *keyp){
+  // compare key of each queue item against given key
+  element_i *ep = (element_i *)elementp;
+  char *key = (char *)keyp;
+  printf("is %s equal to %s", ep->key, key); //test that ep->key is accessing the correct field of the element pointer
+
+  if(ep->key == key) return true; //check if element's key field matches the desired key
+  else return false;  
+  
+}
+
+void *hsearch(hashtable_t *htp, bool (*searchfn)(void* elementp, const void* searchkeyp), const char *key, int32_t keylen){
+  uint32_t loc;
+  hashtable_i*hh = (hashtable_i*)htp;
+  queue_t*qp;//pointer to the queue to be searched
+  void *target;//original fed output of qsearch into this but no longer, not deleting yet incase we need it
+  loc = SuperFastHash(key, keylen, hh->hsize); //run hash function so don't have to search entire array, just find location
+  qp = hh->slots[loc];
+  return qsearch(qp, hsearchfn, (void*)key);
+  
+}
+
+//hremove -- removes and returns an entry under a designated key
+// using a designated serach fn -- returns a pointer to the entry
+// or null if not found
+// basically the same logic as our hsearch:
+// use hash function to find the location in the table
+// then take the queue at that location and feed into queue implimentation of the function (in this case qremove)
+// we think we needed a new a search fn so as to compare the key of the element to the search key
+
+void *hremove(hashtable_t *htp, bool (*searchfn)(void* elementp, const void* searchkeyp), const char *key, int32_t keylen){
+  uint32_t loc;
+  hashtable_i*hh = (hashtable_i*)htp;
+  queue_t*qp;//pointer to the queue to be searched
+  void *target;
+  loc = SuperFastHash(key, keylen, hh->hsize); //run hash function so don't have to search entire array, just find location
+  qp = hh->slots[loc];
+  return qremove(qp, hsearchfn, (void*)key);
+}
