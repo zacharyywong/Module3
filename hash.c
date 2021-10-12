@@ -12,7 +12,7 @@
 #include <queue.c>
 
 #define MAXCHAR 10
-#define MAXARR 100
+#define MAXARR 10
 
 /* 
  * SuperFastHash() -- produces a number between 0 and the tablesize-1.
@@ -78,6 +78,7 @@ static uint32_t SuperFastHash (const char *data,int len,uint32_t tablesize) {
   hash += hash >> 17;
   hash ^= hash << 25;
   hash += hash >> 6;
+	printf("location of element = %d \n", hash % tablesize);
   return hash % tablesize;
 }
 
@@ -85,16 +86,20 @@ static uint32_t SuperFastHash (const char *data,int len,uint32_t tablesize) {
 
 hashtable_t *hopen(uint32_t hsize){
   hashtable_i* hh;
-	
+	int i;
 	hh = (hashtable_i*)malloc(sizeof(hh));// allocate memory for internal represenation of table
-  if(hh == NULL){
-    free(hh);
-    return NULL;
-  }
+  //if(hh == NULL){
+	// free(hh);
+	// return NULL;
+  //}
   hh->hsize = hsize; 
   hh->length = 0;
-	for(int i=0; i < hsize; i++){
-		hh->slots[i]=qopen();
+	for(i=0; i < hsize; i++){
+		hh->slots[i] =qopen();
+		//printf("queue open for slot %d", i);
+		//if (hh->slots[i] == NULL){
+		//	printf("null initialization in hopen");
+		//}
 	}
 	
 	//queue_t* slots [hsize]; //declare array
@@ -138,6 +143,7 @@ int32_t hput(hashtable_t *htp, void *ep, const char *key, int keylen){
   uint32_t loc;
   queue_t*qp;
   hashtable_i*hh = (hashtable_i*)htp;
+	
 	// element_h*elep = NULL;
   loc = SuperFastHash(key, keylen, hh->hsize);
 	//	printf("in hput, before first if statement\n\n");
@@ -168,6 +174,10 @@ int32_t hput(hashtable_t *htp, void *ep, const char *key, int keylen){
 		//}
   if(hh->slots[loc] != qp) return 1; //check that queue in proper part of the table
   //if(qsearch(qp, searchfn, elep) == NULL) return 1; //utilize search functionality of queue to check for success
+	//	if(hh->slots[loc] == NULL){
+	//	printf("error: slot is NULL at loc %d", loc);
+	//	return 1;
+	//}
 	//printf("about to return 0\n\n");
 	return 0; //if it makes it thru the above checks --> success
 }
@@ -178,12 +188,15 @@ int32_t hput(hashtable_t *htp, void *ep, const char *key, int keylen){
 void happly(hashtable_t *htp, void(*fn)(void*ep)){
   hashtable_i*hh = (hashtable_i*)htp;
   uint32_t loc;
+	
 	if(hh->length == 0) return;
-	printf("past if statement, hhslotslo\n\n");
-	for(loc=0;loc<=hh->hsize;loc++){
-		printf("hhslotsloc = %s \n\n", hh->slots[loc]);
-		qapply(hh->slots[loc], fn);
-	}
+	//	printf("past if statement, hhslotslo\n\n");
+	for(loc=0; loc <hh->hsize;loc++){
+		//		 printf("hhnumberofelements = %d \n\n", hh->length);
+		 printf("hhlocation = %d \n\n", loc);
+		 //printf("hhinsideslot = %p \n\n", hh->slots[loc]);
+			qapply(hh->slots[loc], fn);
+		}	
 }
 
 //hsearch -- searchs for an entry under a designated key using a
@@ -196,10 +209,8 @@ static bool hsearchfn(void *elementp, const void *keyp){
   element_h *ep = (element_h *)elementp;
   char *key = (char *)keyp;
   printf("is %s equal to %s", ep->key, key); //test that ep->key is accessing the correct field of the element pointer
-
   if(ep->key == key) return true; //check if element's key field matches the desired key
   else return false;  
-  
 }
 
 void *hsearch(hashtable_t *htp, bool (*searchfn)(void* elementp, const void* searchkeyp), const char *key, int32_t keylen){
