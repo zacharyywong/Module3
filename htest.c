@@ -110,7 +110,7 @@ int main(){
 
 	hput(hash1, (void*)(steve), steve->name, 5);
 	hput(hash1, (void*)(elise), elise->name, 5);
-	hput(hash1, (void*)(mike), mike->name, 6);
+	hput(hash1, (void*)(mike), mike->name, 4);
 	
 	
 	//printf("just hput 1 people\n\n");

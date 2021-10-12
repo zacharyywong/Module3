@@ -113,8 +113,8 @@ int32_t qput(queue_t *qp, void *elementp){
 	}
 	*/
 	//	elementp_i ->arr[i] = elementp_t ->arr[i];
-	elementp_i ->data = elementp_t;
-	elementp_i ->next = NULL;
+	elementp_i->data = elementp_t;
+	elementp_i->next = NULL;
 	//elementp_t = elementp_i;
 	
 	//elementp_t ->data = elementp_i->data;
@@ -184,15 +184,18 @@ void qapply(queue_t *qp, void (*fn)(void* elementp)){
 	rp = (queue_i*) qp;
 	printf("outside of for loop of qapply\n\n");
 	// make current Element equal to the specific queue's front element
-	for (currentElement= rp -> front; currentElement!=NULL; currentElement=currentElement->next){
+	if(rp->front == NULL) printf("rp -> front is NULL\n\n");
+	currentElement= rp -> front;
+	while (currentElement!=NULL){
 		//printf("currentElement %s = \n\n",currentElement->data);
-		currentElementV = currentElement -> data;
+		currentElementV = currentElement->data;
 		if (currentElementV == NULL){
 			//			printf("element in queue supposed to be null %s", currentElement);
 			printf("warning: entered for loop but element is NULL! \n\n");
 		}
 		printf("element being applied to function... \n\n");
 		fn(currentElementV);
+		currentElement=currentElement->next;
 	}
 
 }

@@ -87,7 +87,7 @@ static uint32_t SuperFastHash (const char *data,int len,uint32_t tablesize) {
 hashtable_t *hopen(uint32_t hsize){
   hashtable_i* hh;
 	int i;
-	hh = (hashtable_i*)malloc(sizeof(hh));// allocate memory for internal represenation of table
+	hh = (hashtable_i*)malloc(sizeof(hashtable_i));// allocate memory for internal represenation of table
   //if(hh == NULL){
 	// free(hh);
 	// return NULL;
@@ -95,7 +95,7 @@ hashtable_t *hopen(uint32_t hsize){
   hh->hsize = hsize; 
   hh->length = 0;
 	for(i=0; i < hsize; i++){
-		hh->slots[i] =qopen();
+		hh->slots[i]=qopen();
 		//printf("queue open for slot %d", i);
 		//if (hh->slots[i] == NULL){
 		//	printf("null initialization in hopen");
