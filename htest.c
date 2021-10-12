@@ -65,11 +65,13 @@ person_t* make_person(char* name, int age, int gradYear, int fav){
  */
 
 void print_person(void *vp){
+	printf("%p\n\n", vp);
 	if (vp == NULL){
 		printf("person not found \n\n");
 		return;
 		
 	}
+	printf("made it past if, person exists\n\n");
 	person_t* pp1;
 	//person_t* pp2;
 	pp1=(person_t*) vp;
@@ -78,7 +80,7 @@ void print_person(void *vp){
 	//pp1 -> age = 3;
 	//pp1 -> gradYear = 30;
 	
-	
+	printf("just before real printf\n\n");
 	//  printf("name: %s, gradYear = %d, fav = %d, age = %d \n\n", pp->name, pp->gradYear, pp->fav, pp->age);
 	printf("name %s, age %d, gradYear %d, fav %d \n\n", pp1->name, pp1->age, pp1->gradYear, pp1 ->fav);
  
@@ -107,12 +109,13 @@ int main(){
 	happly(hash1, print_person);
 	printf("just did happly\n\n");
 
-	hput(hash1, (void*)(steve), "steve", 5);
-	hput(hash1, (void*)(elise), "elise", 5);
-	hput(hash1, (void*)mike, "mike", 4);
+	hput(hash1, (void*)(steve), steve->name, 5);
+	hput(hash1, (void*)(elise), elise->name, 5);
+	hput(hash1, (void*)(mike), mike->name, 4);
 	
 	printf("just hput 3 people\n\n");
 	happly(hash1, print_person); 
+	printf("just before hclose\n\n");
 	hclose(hash1);
 
 }

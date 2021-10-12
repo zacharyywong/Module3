@@ -138,10 +138,10 @@ int32_t hput(hashtable_t *htp, void *ep, const char *key, int keylen){
   uint32_t loc;
   queue_t*qp;
   hashtable_i*hh = (hashtable_i*)htp;
-  element_h*elep = NULL;
+	// element_h*elep = NULL;
   loc = SuperFastHash(key, keylen, hh->hsize);
-	printf("in hput, before first if statement\n\n");
-	printf("%p\n\n", hh->slots[loc]);
+	//	printf("in hput, before first if statement\n\n");
+	//printf("%p\n\n", hh->slots[loc]);
 	/*if (hh->slots[loc]==NULL){//in the case that this is the first element at this location in the table
 		printf("just inside if statement\n\n");
 		qp = qopen();
@@ -155,16 +155,20 @@ int32_t hput(hashtable_t *htp, void *ep, const char *key, int keylen){
 		}else{//if there is an existing*/
 	//printf("made it in else\n\n");
     qp = hh->slots[loc];//retrieve pointer to existing queue
-		printf("qp is %p\n\n", qp);
-    strcpy(elep->key, key);//put key and data into element structure
-    elep->data = ep;
-    qput(qp, elep);//put completed element structure into exisiting queue
+		//printf("qp is %p\n\n", qp);
+		//printf("key is %s\n\n", key);
+		//printf("elep key is %s\n\n", elep->key);
+		//strcpy(elep->key, key);//put key and data into element structure
+		//	printf("after strcpy\n\n");
+		//elep->data = ep;
+		//printf("after eleb->data\n\n");
+    qput(qp, ep);//put completed element structure into exisiting queue
     hh->length+=1;
-		printf("end of else statement\n\n");
+		//printf("end of else statement\n\n");
 		//}
   if(hh->slots[loc] != qp) return 1; //check that queue in proper part of the table
   //if(qsearch(qp, searchfn, elep) == NULL) return 1; //utilize search functionality of queue to check for success
-	printf("about to return 0\n\n");
+	//printf("about to return 0\n\n");
 	return 0; //if it makes it thru the above checks --> success
 }
 
@@ -175,7 +179,11 @@ void happly(hashtable_t *htp, void(*fn)(void*ep)){
   hashtable_i*hh = (hashtable_i*)htp;
   uint32_t loc;
 	if(hh->length == 0) return;
-	for(loc=0;loc<=hh->hsize;loc++) qapply(hh->slots[loc], fn);
+	printf("past if statement, hhslotslo\n\n");
+	for(loc=0;loc<=hh->hsize;loc++){
+		printf("hhslotsloc = %s \n\n", hh->slots[loc]);
+		qapply(hh->slots[loc], fn);
+	}
 }
 
 //hsearch -- searchs for an entry under a designated key using a

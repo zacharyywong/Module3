@@ -174,12 +174,14 @@ void* qget(queue_t *qp){
 
 /* apply a function to every element of the queue */
 void qapply(queue_t *qp, void (*fn)(void* elementp)){
+	
 	element_i* currentElement;
 	void* currentElementV; 
 	queue_i *rp;
 	rp = (queue_i*) qp;
 	// make current Element equal to the specific queue's front element
 	for (currentElement= rp -> front; currentElement!=NULL; currentElement=currentElement->next){
+		//printf("currentElement %s = \n\n",currentElement->data); 
 		currentElementV = currentElement -> data;
 		fn(currentElementV);
 	}
