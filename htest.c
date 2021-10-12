@@ -11,7 +11,7 @@
 
 #define MAXREG 10
 #define HASHSIZE 10
-
+#define MAXCHAR 10
 //#include <queue.c>
 #include <queue.h>
 #include <hash.h>
@@ -30,6 +30,10 @@ typedef struct person {
 	//int age;
 } person_t;
 
+typedef struct element_htest {
+	void *data;
+	char key[MAXCHAR];
+} element_htest;
 
 person_t* make_person(char* name, int age, int gradYear, int fav){
 	person_t* pp=NULL;
@@ -80,29 +84,35 @@ void print_person(void *vp){
  
 }
 
-static bool searchfn(void* elementp, const void* keyp){                                                                             
-// compare the two elements                                    
-	 if(elementp == keyp){                                                       
-		 return(true);                                                             
-	   }else{                                                                      
-	  return(false);                                                            
-	 }                                                                           
+static bool hsearchfn(void* elementp, const void* keyp){                                                                             
+	element_htest *ep = (element_htest *) elementp;
+	char *key = (char *)keyp;
+	// compare the two elements                                    
+	if(ep->key == key)return(true);                                                             
+	else return(false);                                                                                      
 }
 
 int main(){
-  person_t*steve = make_person("Steve", 50, 1999, 3);
-	person_t*elise = make_person("elise", 80, 1963, 8);                            person_t*mike = make_person("mike", 53, 1963, 15);
+	printf("Made it into main function\n\n");
+	person_t*steve = make_person("Steve", 50, 1999, 3);
+	person_t*elise = make_person("elise", 80, 1963, 8);
+	person_t*mike = make_person("mike", 53, 1963, 15);
 	//person_t*pam = make_person("pam", 45, 1980, 30);
 	//person_t*tom = make_person("tom", 30, 1990, 25);
   //person_t*jess = make_person("jess", 25, 2000, 17);                                           
 
   hashtable_t* hash1 = hopen(HASHSIZE);
+	printf("just opened a hastable\n\n");
 	//print on empty hashtable
 	happly(hash1, print_person);
+	printf("just did happly\n\n");
+
 	hput(hash1, (void*)(steve), "steve", 5);
 	hput(hash1, (void*)(elise), "elise", 5);
 	hput(hash1, (void*)mike, "mike", 4);
+	
+	printf("just hput 3 people\n\n");
 	happly(hash1, print_person); 
-   
+	hclose(hash1);
 
 }

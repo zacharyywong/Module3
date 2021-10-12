@@ -26,10 +26,10 @@
 
 typedef void hashtable_t; /* representation of a hashtable hidden */ 
 //internal represenation of a hash table:
-typedef struct elementstruct{//not too confident about this but think we need it for opening it...
+typedef struct elementstruct_h{//not too confident about this but think we need it for opening it...
   void *data; //can handle any sort of data
   char key[MAXCHAR];
-} element_i;
+} element_h;
 
 
 typedef struct hashstruct{
@@ -85,13 +85,18 @@ static uint32_t SuperFastHash (const char *data,int len,uint32_t tablesize) {
 
 hashtable_t *hopen(uint32_t hsize){
   hashtable_i* hh;
-  hh = (hashtable_i*)malloc(sizeof(hh));// allocate memory for internal represenation of table
+	
+	hh = (hashtable_i*)malloc(sizeof(hh));// allocate memory for internal represenation of table
   if(hh == NULL){
     free(hh);
     return NULL;
   }
   hh->hsize = hsize; 
   hh->length = 0;
+	for(int i=0; i < hsize; i++){
+		hh->slots[i]=qopen();
+	}
+	
 	//queue_t* slots [hsize]; //declare array
 	//hh -> slots = slots; 
   //allocate memory for the array of entries
@@ -133,25 +138,34 @@ int32_t hput(hashtable_t *htp, void *ep, const char *key, int keylen){
   uint32_t loc;
   queue_t*qp;
   hashtable_i*hh = (hashtable_i*)htp;
-  element_i*elep = NULL;
+  element_h*elep = NULL;
   loc = SuperFastHash(key, keylen, hh->hsize);
-  if (hh->slots[loc]!=NULL){//in the case that this is the first element at this location in the table
-    qp = qopen();
-    hh->slots[loc]=qp;
+	printf("in hput, before first if statement\n\n");
+	printf("%p\n\n", hh->slots[loc]);
+	/*if (hh->slots[loc]==NULL){//in the case that this is the first element at this location in the table
+		printf("just inside if statement\n\n");
+		qp = qopen();
+		printf("opened new queue\n\n");
+		hh->slots[loc]=qp;
     strcpy(elep->key, key);
     elep->data = ep;
     qput(qp, elep);
     hh->length+=1;
-  }else{//if there is an existing
+		printf("end of if statement\n\n");
+		}else{//if there is an existing*/
+	//printf("made it in else\n\n");
     qp = hh->slots[loc];//retrieve pointer to existing queue
+		printf("qp is %p\n\n", qp);
     strcpy(elep->key, key);//put key and data into element structure
     elep->data = ep;
     qput(qp, elep);//put completed element structure into exisiting queue
     hh->length+=1;
-  }
+		printf("end of else statement\n\n");
+		//}
   if(hh->slots[loc] != qp) return 1; //check that queue in proper part of the table
   //if(qsearch(qp, searchfn, elep) == NULL) return 1; //utilize search functionality of queue to check for success
-  return 0; //if it makes it thru the above checks --> success
+	printf("about to return 0\n\n");
+	return 0; //if it makes it thru the above checks --> success
 }
 
 
@@ -160,7 +174,8 @@ int32_t hput(hashtable_t *htp, void *ep, const char *key, int keylen){
 void happly(hashtable_t *htp, void(*fn)(void*ep)){
   hashtable_i*hh = (hashtable_i*)htp;
   uint32_t loc;
-  for(loc=0;loc<=hh->hsize;loc++) qapply(hh->slots[loc], fn);
+	if(hh->length == 0) return;
+	for(loc=0;loc<=hh->hsize;loc++) qapply(hh->slots[loc], fn);
 }
 
 //hsearch -- searchs for an entry under a designated key using a
@@ -170,7 +185,7 @@ void happly(hashtable_t *htp, void(*fn)(void*ep)){
 
 static bool hsearchfn(void *elementp, const void *keyp){
   // compare key of each queue item against given key
-  element_i *ep = (element_i *)elementp;
+  element_h *ep = (element_h *)elementp;
   char *key = (char *)keyp;
   printf("is %s equal to %s", ep->key, key); //test that ep->key is accessing the correct field of the element pointer
 

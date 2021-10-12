@@ -227,7 +227,7 @@ static bool searchfn(void* elementp, const void* keyp){
   }                                                                                      
 } 
 */
-static bool searchfn(void* elementp, const void* keyp){                        
+/*static bool searchfn(void* elementp, const void* keyp){                        
                                                                                 
 // compare the two elements                                                     
    if(elementp == keyp){                                                        
@@ -235,7 +235,7 @@ static bool searchfn(void* elementp, const void* keyp){
      }else{                                                                                                                                               
     return(false);                                                              
    }                                                                            
-}   
+	 } */  
 void* qsearch(queue_t *qp, 
 							bool (*searchfn)(void* elementp,const void* keyp),
 							const void* skeyp){
