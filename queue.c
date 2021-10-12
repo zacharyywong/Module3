@@ -182,9 +182,9 @@ void qapply(queue_t *qp, void (*fn)(void* elementp)){
 	void* currentElementV; 
 	queue_i *rp;
 	rp = (queue_i*) qp;
-	printf("outside of for loop of qapply\n\n");
+	//printf("outside of for loop of qapply\n\n");
 	// make current Element equal to the specific queue's front element
-	if(rp->front == NULL) printf("rp -> front is NULL\n\n");
+	//if(rp->front == NULL) printf("rp -> front is NULL\n\n");
 	currentElement= rp -> front;
 	while (currentElement!=NULL){
 		//printf("currentElement %s = \n\n",currentElement->data);
@@ -193,7 +193,7 @@ void qapply(queue_t *qp, void (*fn)(void* elementp)){
 			//			printf("element in queue supposed to be null %s", currentElement);
 			printf("warning: entered for loop but element is NULL! \n\n");
 		}
-		printf("element being applied to function... \n\n");
+		//printf("element being applied to function... \n\n");
 		fn(currentElementV);
 		currentElement=currentElement->next;
 	}

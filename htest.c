@@ -85,12 +85,28 @@ void print_person(void *vp){
 	//printf("test");
 }
 
-static bool hsearchfn(void* elementp, const void* keyp){                                                                             
+/*static bool hsearchfn(void* elementp, const void* keyp){                                                                             
 	element_htest *ep = (element_htest *) elementp;
 	char *key = (char *)keyp;
 	// compare the two elements                                    
-	if(ep->key == key)return(true);                                                             
+	printf("ep key is %s and key is %s\n\n", ep->key, key);
+	if(ep->key == key){
+		printf("entered if statement\n\n");
+		return(true);
+	}
 	else return(false);                                                                                      
+}*/
+
+static bool searchfn(void* elementp, const void* keyp){
+	person_t* elementperson;
+	elementperson = (person_t*)elementp;
+	char *key = (char *)keyp;
+	
+	if(elementperson->name  == key){
+		printf("in if statement\n\n");
+		return(true);
+	}
+	else return(false);
 }
 
 int main(){
@@ -101,7 +117,9 @@ int main(){
 	//person_t*pam = make_person("pam", 45, 1980, 30);
 	//person_t*tom = make_person("tom", 30, 1990, 25);
   //person_t*jess = make_person("jess", 25, 2000, 17);                                           
-
+	person_t* blank1;
+	person_t* blank2;
+	
   hashtable_t* hash1 = hopen(HASHSIZE);
 	//printf("just opened a hastable\n\n");
 	//print on empty hashtable
@@ -115,7 +133,13 @@ int main(){
 	
 	//printf("just hput 1 people\n\n");
 	happly(hash1, print_person); 
-	//printf("just before hclose\n\n");
-	//hclose(hash1);
+	printf("just before hsearch\n\n");
+
+	blank1 = (person_t*)hsearch(hash1,searchfn,steve->name,5);
+	print_person((void*)(blank1));
+	printf("about to remove steve\n\n");
+	blank2 = (person_t*)hremove(hash1,searchfn,steve->name,5);
+	happly(hash1, print_person);
+	hclose(hash1);
 
 }

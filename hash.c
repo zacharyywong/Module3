@@ -126,7 +126,7 @@ void hclose(hashtable_t *htp){
   // free any allocated keys
   for(uint32_t i = 0; i < hh->hsize; i++){
     //if (hh->slots[i] != NULL){
-		printf("deleting: %p",hh->slots[i]);//for testing purposes (prints pointer address)
+		printf("deleting: %p\n\n",hh->slots[i]);//for testing purposes (prints pointer address)
       //free((void*)hh->slots[i]);
 		qclose(hh->slots[i]);
     }
@@ -204,14 +204,14 @@ void happly(hashtable_t *htp, void(*fn)(void*ep)){
 //need to modify the search function because the elements of these queues
 //will have a data field and a key field
 
-static bool hsearchfn(void *elementp, const void *keyp){
+/*static bool hsearchfn(void *elementp, const void *keyp){
   // compare key of each queue item against given key
   element_h *ep = (element_h *)elementp;
   char *key = (char *)keyp;
-  printf("is %s equal to %s", ep->key, key); //test that ep->key is accessing the correct field of the element pointer
+  printf("is %s equal to %s\n\n", ep->key, key); //test that ep->key is accessing the correct field of the element pointer
   if(ep->key == key) return true; //check if element's key field matches the desired key
   else return false;  
-}
+	}*/
 
 void *hsearch(hashtable_t *htp, bool (*searchfn)(void* elementp, const void* searchkeyp), const char *key, int32_t keylen){
   uint32_t loc;
@@ -220,7 +220,7 @@ void *hsearch(hashtable_t *htp, bool (*searchfn)(void* elementp, const void* sea
   //void *target;//original fed output of qsearch into this but no longer, not deleting yet incase we need it
   loc = SuperFastHash(key, keylen, hh->hsize); //run hash function so don't have to search entire array, just find location
   qp = hh->slots[loc];
-  return qsearch(qp, hsearchfn, (void*)key);
+  return qsearch(qp, searchfn, (void*)key);
   
 }
 
@@ -239,5 +239,5 @@ void *hremove(hashtable_t *htp, bool (*searchfn)(void* elementp, const void* sea
   //void *target;
   loc = SuperFastHash(key, keylen, hh->hsize); //run hash function so don't have to search entire array, just find location
   qp = hh->slots[loc];
-  return qremove(qp, hsearchfn, (void*)key);
+  return qremove(qp, searchfn, (void*)key);
 }
