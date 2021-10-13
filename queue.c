@@ -164,7 +164,11 @@ void* qget(queue_t *qp){
   element_i *got;
   queue_i *rp;
   void * vp;
-  rp = (queue_i*) qp; 
+  rp = (queue_i*) qp;
+	if (rp->front==NULL){
+		printf("getting from an empty queue\n\n");
+		return NULL;
+	}
 
   // store front in temporary pointer to return later 
   got = rp -> front;
@@ -194,6 +198,7 @@ void qapply(queue_t *qp, void (*fn)(void* elementp)){
 	//if(rp->front == NULL) printf("rp -> front is NULL\n\n");
 	currentElement= rp -> front;
 	while (currentElement!=NULL){
+		//		printf("applying function to element...");
 		//printf("currentElement %s = \n\n",currentElement->data);
 		currentElementV = currentElement->data;
 		if (currentElementV == NULL){
@@ -278,7 +283,6 @@ void* qsearch(queue_t *qp,
 	}
 	//if no match in the whole list 
 	return NULL;
-
 }
 
 /* search a queue using a supplied boolean function (as in qsearch),
@@ -300,23 +304,30 @@ void* qremove(queue_t *qp,
 		result = searchfn(p->data, skeyp);
 
 		//remove p if match found
-		if (result){
+		if (result==true){
+			printf("removing element...");
 			got=p;
 			//check if p is front 
-			if (p == rp->front){	
+			if (p == rp->front){
+			printf("removing front of queue...");
 			rp ->front = p->next;
 			}
 			else{
-				prev ->next = p ->next;
+			 prev ->next = p ->next;
 			}
 			vp = got->data;
 			free(got);
 			return vp;
 		}
+		//		else{
+		//	printf("element not found");
+		//	return NULL;
+		//		}
 
 		// update back pointer
 		prev = p;
 	}
+	printf("warning: no such element in queue\n");
 	return NULL;
 }
 
@@ -326,8 +337,26 @@ void* qremove(queue_t *qp,
 void qconcat(queue_t *q1p, queue_t *q2p){
 	//link back of q1 to front of q2
 	queue_i *r1p = (queue_i*) q1p;
-	queue_i *r2p = (queue_i*) q2p; 
-	r1p->back->next = r2p -> front;
+	queue_i *r2p = (queue_i*) q2p;
+	//element_i* elementp_i;
+	
+	if (r1p->front==NULL && r2p->front==NULL){
+		printf("both queues are empty... closing 2nd queue\n");
+	}
+	else if (r1p->front != NULL && r2p->front ==NULL){
+		printf("the second queue is empty...closing the second queue\n");
+	}
+	else if (r1p->front == NULL && r2p ->front !=NULL){
+		printf("concatenating where first queue is empty and second queue is not empty...\n");
+		//elementp_i -> data = r2p->front->data;
+		//elementp_i->next = r2p->front->next;
+		r1p->front = r2p->front;
+		//		r1p->front->next= r2p->front->next;
+	}
+	else{
+		printf("concatenating 2 queues where both queues are not empty...\n");
+		r1p->back->next = r2p -> front;
+	}
 	free(r2p);
 
 }

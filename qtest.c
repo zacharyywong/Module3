@@ -90,10 +90,14 @@ static bool searchfn(void* elementp, const void* keyp){
 int main(){
 	queue_t *queue1; 
 	queue_t *queue2;
-
+  queue_t *queue3;
+ queue_t *queue4;
+ 
 	person_t *blank1;
 	person_t *blank2;
 	person_t *blank3;
+	person_t *blank4;
+	person_t *blank5;
 
 	person_t *zach = make_person("zach", 20, 2023, 500);
 	person_t *foster = make_person("foster", 22, 2022, 501); 
@@ -103,11 +107,14 @@ int main(){
 	person_t *cam = make_person("cam", 22, 2050, 503);
 	person_t *sarah = make_person("sarah", 21, 2019, 504);
 	person_t *billie = make_person("billie", 18, 2026, 505);
-
+	
 	// open/apply/put functions
 	queue1 = qopen();
 	//qapply(queue1,print_person); //print on empty list
-	//printf("print before putting in queue \n");                                                                                                                                                
+	//printf("print before putting in queue \n");
+
+
+	qget(queue1);
 	// print_person((void*)zach);
 	qput(queue1, (void*)zach);
 	//printf("print first queue \n"); 
@@ -131,12 +138,18 @@ int main(){
 	
 	// get function
 	blank1 = (person_t*)qget(queue1);
-	blank2 = (person_t*)qget(queue2);
-	printf("print queue1 after using qget()\n");
+	blank2 = (person_t*)qget(queue1);
+	blank3 = (person_t*)qget(queue1);
+	printf("print queue1 after using qget() 3 times \n");
 	qapply(queue1, print_person);
-	printf("print queue2 after using qget()\n");
-	qapply(queue2, print_person);
-		
+	//	printf("print queue2 after using qget()\n");
+	//qapply(queue2, print_person);
+
+	qput(queue1, (void*)foster);
+	qput(queue1, (void*)mikaela);
+	qput(queue1, (void*)cam);
+	printf("print queue1 after using putting foster, mik, and cam back in()\n");
+	qapply(queue1, print_person);
 	// search for foster (present)
 	blank1 = (person_t*)qsearch(queue1, searchfn, (void*)foster);
 	printf("Person found after searching for foster\n");
@@ -156,7 +169,7 @@ int main(){
 	print_person((void*)(blank3));
 	
 	//remove
-	blank1 = (person_t*)qremove(queue1, searchfn, mikaela);
+	blank1 = (person_t*)qremove(queue1, searchfn, cam);
 	printf("print queue1 after removing mikaela\n");
 	qapply(queue1, print_person);
 	
@@ -167,7 +180,12 @@ int main(){
 	// remove billie from queue 2
 	blank2 = (person_t*)qremove(queue2, searchfn, billie);                      
   printf("print queue2 after removing billie\n");                              
-  qapply(queue2, print_person); 
+  qapply(queue2, print_person);
+
+	// remove billie again from queue2 (not present)
+	blank2 = (person_t*)qremove(queue2, searchfn, billie);                       
+  printf("print queue2 after removing billie\n");                              
+  qapply(queue2, print_person);
   
 	//concat
 	qconcat(queue1, queue2);
@@ -176,6 +194,100 @@ int main(){
 	
 	//close 
 	qclose(queue1);
+	//	qclose(queue2);
+
+		
+	/*
+	// testing seg faults
+	queue3 = qopen();
+	qget(queue3);
+	qput(queue3, (void*)zach);                                                                          
+  qput(queue3, (void*)foster);                                                                          
+  qput(queue3, (void*)mikaela);
+	printf("print after putting zach, foster, mikaela in queue3\n\n");                                       
+  qapply(queue3, print_person);
+
+	qget(queue3);
+	qget(queue3);
+	qget(queue3);
+	printf("print after getting zach, foster, mikaela in queue3\n\n");                                       
+  qapply(queue3, print_person);
+	
+	//testing concat 
+	queue4 = qopen();
+	printf("concat testing all 4 cases \n\n");
+	qconcat(queue3, queue4);
+	printf("print after concatenating empty queue3 and empty queue4\n\n");                                       
+  qapply(queue3, print_person);
+
+	printf("reopen queue4...\n");
+	queue4=qopen();
+	printf("putting zach in queue 3...\n");
+	qput(queue3, (void*)zach);
+	printf("print after putting zach in queue3 with empty queue4\n");  
+	qapply(queue3, print_person);
+	qconcat(queue3, queue4);
+	printf("print after concatenating queue3 and empty queue4 \n\n");
+  qapply(queue3, print_person);                                                                                                    
+	
+	printf("reopen queue4...\n");
+	queue4=qopen();
+	printf("get() on queue3...now should be empty\n");
+	qget(queue3);
+	printf("putting zach in queue 4...\n");
+	qput(queue4, (void*)zach);
+	printf("print queue 4 after putting zach in queue3 with empty queue4\n");
+	qapply(queue4, print_person);
+	qconcat(queue3, queue4);
+	printf("print queue 3after concatenating empty queue3 and queue4 with zach \n\n");
+	qapply(queue3, print_person);                                                                                                    
+          
+	printf("reopen queue4...\n");
+	queue4=qopen();
+	printf("putting mikaela in queue 3...\n");
+	qput(queue3, (void*)mikaela);
+	printf("putting mikaela in queue 4...\n");
+	qput(queue4, (void*)foster);
+	qconcat(queue3, queue4);
+	printf("print queue 3 after concatenating queue3 with mikaela and queue4 with foster \n\n");
+	qapply(queue3, print_person);
+
+	//testing remove 
+	printf("remove() testing\n");
+	printf("printing existing queue3\n");
+	qapply(queue3, print_person);
+	blank1 = (person_t*)qremove(queue3, searchfn, (void*)zach);
+	printf("printing queue 3 after removing zach (1st element) from queue3\n\n");
+	qapply(queue3, print_person);
+	//	free (blank1);
+	blank1 = (person_t*)qremove(queue3, searchfn, (void*)foster);
+  printf("printing queue 3 after removing foster (last element) from queue3\n\n");                                                 qapply(queue3, print_person);
+	//	free(blank1);
+	
+	printf("putting zach into queue3\n");
+	printf("putting foster into queue3\n");
+	qput(queue3, (void*)zach);
+	qput(queue3, (void*)foster);
+	printf("printing resulting queue3 after putting zach and foster\n");
+	qapply(queue3, print_person);
+  printf("removing zach from queue3\n");
+	blank1 = (person_t*)qremove(queue3, searchfn, (void*)zach); 
+  printf("printing resulting queue3 after removing zach\n\n");                                                            
+  qapply(queue3, print_person);
+
+	printf("removing sarah (not present)  from queue3\n");
+	blank1 = (person_t*)qremove(queue3, searchfn, (void*)sarah);
+	printf("printing resulting queue3 after removing sarah\n\n");
+	qapply(queue3, print_person); 
+
+
+	
+
+
+	qclose(queue3);
+	//	qclose(queue4);
+
+	*/
 	free(foster);
 	free(cam);
 	free(zach);
