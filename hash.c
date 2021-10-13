@@ -78,7 +78,7 @@ static uint32_t SuperFastHash (const char *data,int len,uint32_t tablesize) {
   hash += hash >> 17;
   hash ^= hash << 25;
   hash += hash >> 6;
-	printf("location of element = %d \n", hash % tablesize);
+  //	printf("location of element = %d \n", hash % tablesize);
   return hash % tablesize;
 }
 
@@ -126,10 +126,12 @@ void hclose(hashtable_t *htp){
   // free any allocated keys
   for(uint32_t i = 0; i < hh->hsize; i++){
     //if (hh->slots[i] != NULL){
-		printf("deleting: %p\n\n",hh->slots[i]);//for testing purposes (prints pointer address)
+    //printf("deleting: %p\n\n",hh->slots[i]);//for testing purposes (prints pointer address)
       //free((void*)hh->slots[i]);
-		qclose(hh->slots[i]);
+      qclose(hh->slots[i]);
+		
     }
+  
   
   // free entire array of slots
   //free(hh->slots);
@@ -193,7 +195,7 @@ void happly(hashtable_t *htp, void(*fn)(void*ep)){
 	//	printf("past if statement, hhslotslo\n\n");
 	for(loc=0; loc <hh->hsize;loc++){
 		//		 printf("hhnumberofelements = %d \n\n", hh->length);
-		 printf("hhlocation = %d \n\n", loc);
+	  //printf("hhlocation = %d \n\n", loc);
 		 //printf("hhinsideslot = %p \n\n", hh->slots[loc]);
 			qapply(hh->slots[loc], fn);
 		}	

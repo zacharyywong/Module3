@@ -64,14 +64,10 @@ typedef struct person{
 /* deallocate a queue, frees everything in it */
 
 void qclose(queue_t *qp){
-  element_i *p;
   queue_i *rp = (queue_i*) qp;
   //for(p = rp->front; p != NULL; p=p->next){
   //free(p);
-  while(rp->front != NULL){
-    p = (element_i *)qget(rp);
-    free(p);
-  }
+  while(rp->front != NULL)(element_i *)qget(rp);
   free(rp);
 }
 
@@ -87,99 +83,99 @@ static void fillDataArr(element_i *elementp_i, element_i *elementp_t){
  */
 int32_t qput(queue_t *qp, void *elementp){
   queue_i* rp;
-	rp = (queue_i*) qp;
+  rp = (queue_i*) qp;
 
 	
- 	element_i* elementp_i;
-	element_i* elementp_t;
-	//	element_i *elementp_t; 
-	//	element_i *elementp_t;
-	//	elementp = 0;
-	//elementp = NULL;
-	//	elementp_i = (element_i*) elementp;
-	//elementp_i  = (element_i*)elementp;
-	//adjustStruct(elementp)
-	elementp_i = (element_i*)malloc(sizeof(element_i));
-	elementp_t = (element_i*)elementp;
+  element_i* elementp_i;
+  element_i* elementp_t;
+  //	element_i *elementp_t; 
+  //	element_i *elementp_t;
+  //	elementp = 0;
+  //elementp = NULL;
+  //	elementp_i = (element_i*) elementp;
+  //elementp_i  = (element_i*)elementp;
+  //adjustStruct(elementp)
+  elementp_i = (element_i*)malloc(sizeof(element_i));
+  elementp_t = (element_i*)elementp;
 	
-	// fill in data
-	//fillDataArr(elementp_i, elementp_t
+  // fill in data
+  //fillDataArr(elementp_i, elementp_t
 
 	
-	// need to allocate memory for the actual element object that is going into the queue
+  // need to allocate memory for the actual element object that is going into the queue
 
-	//elementp_i = (element_i*) elementp;
+  //elementp_i = (element_i*) elementp;
 
 
 	
-	/*
-	//copy array into new array of size 2 times greater, free old array, nd 
-	while (elementp_t->arr[COUNT+1] !=NULL){
-		COUNT = COUNT * 2;
-		elementp_i = (element_i*)malloc(sizeof(element_i));
-		elementp_t = (element_i*)elementp;
-		fillDataArr(elementp_i, elementp_t);
-	}
-	*/
-	//	elementp_i ->arr[i] = elementp_t ->arr[i];
-	elementp_i->data = elementp_t;
-	elementp_i->next = NULL;
-	//elementp_t = elementp_i;
+  /*
+  //copy array into new array of size 2 times greater, free old array, nd 
+  while (elementp_t->arr[COUNT+1] !=NULL){
+  COUNT = COUNT * 2;
+  elementp_i = (element_i*)malloc(sizeof(element_i));
+  elementp_t = (element_i*)elementp;
+  fillDataArr(elementp_i, elementp_t);
+  }
+  */
+  //	elementp_i ->arr[i] = elementp_t ->arr[i];
+  elementp_i->data = elementp_t;
+  elementp_i->next = NULL;
+  //elementp_t = elementp_i;
 	
-	//elementp_t ->data = elementp_i->data;
-	//elementp_t ->next = NULL;
-	//elementp_i ->next = NULL;
-	//elementp_t = elementp_i;
-	//	elementp_i = (element_i*)malloc(sizeof(element_i));
-	//	elementp_i ->next = NULL;
-	//void *front;
-	//void *back;
+  //elementp_t ->data = elementp_i->data;
+  //elementp_t ->next = NULL;
+  //elementp_i ->next = NULL;
+  //elementp_t = elementp_i;
+  //	elementp_i = (element_i*)malloc(sizeof(element_i));
+  //	elementp_i ->next = NULL;
+  //void *front;
+  //void *back;
 
-	//make element the front
-	 if (rp->front == NULL){
-			//elementp_i ->next = NULL;
-	//printf("front of list \n");
-	  	rp->front = elementp_i;
-		 rp->back = elementp_i;
-		//		elementp_t ->data = elementp_i->data;
- 		//elementp_t ->next = elementp_i->next;  
-		//rp->back->next = NULL;
-		//rp -> front -> next = NULL;
-	 	}
-	//put the element in the back
+  //make element the front
+  if (rp->front == NULL){
+    //elementp_i ->next = NULL;
+    //printf("front of list \n");
+    rp->front = elementp_i;
+    rp->back = elementp_i;
+    //		elementp_t ->data = elementp_i->data;
+    //elementp_t ->next = elementp_i->next;  
+    //rp->back->next = NULL;
+    //rp -> front -> next = NULL;
+  }
+  //put the element in the back
 	
-	else{
-		//printf("back of list \n");
-		//rp -> back = (element_i*)malloc(sizeof(element_i));
-		rp -> back -> next = elementp_i;
-		rp -> back = elementp_i;
-		//		rp ->back ->data = elementp_i ->data;
+  else{
+    //printf("back of list \n");
+    //rp -> back = (element_i*)malloc(sizeof(element_i));
+    rp -> back -> next = elementp_i;
+    rp -> back = elementp_i;
+    //		rp ->back ->data = elementp_i ->data;
 		
-		//rp -> back = elementp_i ->next;
-		//		rp -> back -> next= NULL;
-	}
-	//	printf("testing in qput, %
-	//free(elementp_i);
-	 return 0;
+    //rp -> back = elementp_i ->next;
+    //		rp -> back -> next= NULL;
+  }
+  //	printf("testing in qput, %
+  //free(elementp_i);
+  return 0;
 }
 
 /* get the first first element from queue, removing it from the queue */
 void* qget(queue_t *qp){
-	element_i *got;
-	queue_i *rp;
-	void * vp;
-	rp = (queue_i*) qp; 
+  element_i *got;
+  queue_i *rp;
+  void * vp;
+  rp = (queue_i*) qp; 
 
-	// store front in temporary pointer to return later 
-	got = rp -> front;
+  // store front in temporary pointer to return later 
+  got = rp -> front;
 
-	//make the original front equal to the orginal front element next element
-	rp -> front = rp -> front -> next;
+  //make the original front equal to the orginal front element next element
+  rp -> front = rp -> front -> next;
 
-	// return the original front element through got pointer
-	vp = got->data;
-	free(got);
-	return vp;
+  // return the original front element through got pointer
+  vp = got->data;
+  free(got);
+  return vp;
 
 }
 

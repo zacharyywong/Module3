@@ -37,7 +37,6 @@ typedef struct element_htest {
 
 person_t* make_person(char* name, int age, int gradYear, int fav){
 	person_t* pp=NULL;
-
 	pp=(person_t*)malloc(sizeof(person_t));
 	// fail case
 	if (pp == NULL){
@@ -79,7 +78,7 @@ void print_person(void *vp){
 	//pp1 -> age = 3;
 	//pp1 -> gradYear = 30;
 	
-	printf("printing person...\n\n");
+	//printf("printing person...\n\n");
 	//  printf("name: %s, gradYear = %d, fav = %d, age = %d \n\n", pp->name, pp->gradYear, pp->fav, pp->age);
 	printf("name %s, age %d, gradYear %d, fav %d \n\n", pp1->name, pp1->age, pp1->gradYear, pp1 ->fav);
 	//printf("test");
@@ -103,7 +102,7 @@ static bool searchfn(void* elementp, const void* keyp){
 	char *key = (char *)keyp;
 	
 	if(elementperson->name  == key){
-		printf("in if statement\n\n");
+	  //		printf("in if statement\n\n");
 		return(true);
 	}
 	else return(false);
@@ -139,7 +138,11 @@ int main(){
 	print_person((void*)(blank1));
 	printf("about to remove steve\n\n");
 	blank2 = (person_t*)hremove(hash1,searchfn,steve->name,5);
+	print_person((void*)(blank2));
+	printf("printing those who are left\n\n");
 	happly(hash1, print_person);
 	hclose(hash1);
-
+	free(steve);
+	free(elise);
+	free(mike);
 }
