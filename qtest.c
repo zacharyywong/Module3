@@ -168,7 +168,7 @@ int main(){
 	blank2 = (person_t*)qremove(queue2, searchfn, billie);                      
   printf("print queue2 after removing billie\n");                              
   qapply(queue2, print_person); 
-	/*
+  
 	//concat
 	qconcat(queue1, queue2);
 	printf("print concatenated queue\n");
@@ -176,5 +176,10 @@ int main(){
 	
 	//close 
 	qclose(queue1);
-	*/
+	free(foster);
+	free(cam);
+	free(zach);
+	free(mikaela);
+	free(sarah);
+	free(billie);
 }

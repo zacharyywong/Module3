@@ -37,15 +37,17 @@ typedef struct queuestruct{
 } queue_i;
 
 
+void* qget(queue_t *qp);
+
 
 /* create an empty queue 
  *return the front pointer 
  */
 queue_t* qopen(void){
 	queue_i *rp;
-	rp = (queue_i*)(malloc(sizeof(queue_i)));
+	rp = (queue_i*)malloc(sizeof(queue_i));
 	rp->front = NULL;
-  rp->back = NULL;
+	rp->back = NULL;
 	return (queue_t*)rp;
 }
 
@@ -62,8 +64,15 @@ typedef struct person{
 /* deallocate a queue, frees everything in it */
 
 void qclose(queue_t *qp){
-	qp = (queue_i*)qp;
-	free(qp);
+  element_i *p;
+  queue_i *rp = (queue_i*) qp;
+  //for(p = rp->front; p != NULL; p=p->next){
+  //free(p);
+  while(rp->front != NULL){
+    p = (element_i *)qget(rp);
+    free(p);
+  }
+  free(rp);
 }
 
 /*
@@ -158,6 +167,7 @@ int32_t qput(queue_t *qp, void *elementp){
 void* qget(queue_t *qp){
 	element_i *got;
 	queue_i *rp;
+	void * vp;
 	rp = (queue_i*) qp; 
 
 	// store front in temporary pointer to return later 
@@ -167,8 +177,9 @@ void* qget(queue_t *qp){
 	rp -> front = rp -> front -> next;
 
 	// return the original front element through got pointer
-	
-	return got->data;
+	vp = got->data;
+	free(got);
+	return vp;
 
 }
 
@@ -287,7 +298,8 @@ void* qremove(queue_t *qp,
 	element_i *got;
   bool result;
 	queue_i *rp  = (queue_i*) qp; 
-
+	void * vp;
+	
 	for (p = rp->front; p != NULL; p=p->next){
 		result = searchfn(p->data, skeyp);
 
@@ -301,7 +313,9 @@ void* qremove(queue_t *qp,
 			else{
 				prev ->next = p ->next;
 			}
-			return (void*)got->data;
+			vp = got->data;
+			free(got);
+			return vp;
 		}
 
 		// update back pointer
