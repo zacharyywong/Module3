@@ -123,6 +123,9 @@ int main(){
 	//printf("just opened a hastable\n\n");
 	//print on empty hashtable
 	happly(hash1, print_person);
+
+	//remove from an empty hashtable
+	blank1 = hremove(hash1, searchfn, mike->name, 4);
 	//printf("just did happly\n\n");
 
 	hput(hash1, (void*)(steve), steve->name, 5);
@@ -137,11 +140,15 @@ int main(){
 	blank1 = (person_t*)hsearch(hash1,searchfn,steve->name,5);
 	print_person((void*)(blank1));
 	printf("about to remove steve\n\n");
-	blank2 = (person_t*)hremove(hash1,searchfn,steve->name,5);
+	blank2 = (person_t*)hremove(hash1,searchfn,mike->name,4);
 	print_person((void*)(blank2));
 	printf("printing those who are left\n\n");
 	happly(hash1, print_person);
 	hclose(hash1);
+
+	
+
+	// do not need to free the blanks bc they are pointing to same spot in memory as steve and mike 
 	free(steve);
 	free(elise);
 	free(mike);
