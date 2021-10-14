@@ -61,17 +61,10 @@ person_t* make_person(char* name, int age, int gradYear, int fav){
 void print_person(void *vp){
 	if (vp == NULL){
 		printf("person not found \n\n");
-		return;
-		
+		return;		
 	}
 	person_t* pp1;
-	//person_t* pp2;
 	pp1=(person_t*) vp;
-	//pp2 = pp1 -> data;
-	//	strcpy(pp1->name, "zach");
-	//pp1 -> age = 3;
-	//pp1 -> gradYear = 30;
-	
 	
 	//  printf("name: %s, gradYear = %d, fav = %d, age = %d \n\n", pp->name, pp->gradYear, pp->fav, pp->age);
 	printf("name %s, age %d, gradYear %d, fav %d \n\n", pp1->name, pp1->age, pp1->gradYear, pp1 ->fav);
@@ -107,8 +100,9 @@ int main(){
 	person_t *cam = make_person("cam", 22, 2050, 503);
 	person_t *sarah = make_person("sarah", 21, 2019, 504);
 	person_t *billie = make_person("billie", 18, 2026, 505);
-	
-	/*// open/apply/put functions
+
+	/*
+	// open/apply/put functions
 	queue1 = qopen();
 	//qapply(queue1,print_person); //print on empty list
 	//printf("print before putting in queue \n");
@@ -193,10 +187,10 @@ int main(){
 	qapply(queue1, print_person);
 	
 	//close 
-	qclose(queue1);*/
+	qclose(queue1);
 	//	qclose(queue2);
 
-		
+	*/
 	
 	// testing seg faults
 	queue3 = qopen();
@@ -300,7 +294,7 @@ int main(){
 	qclose(queue3);
 	//	qclose(queue4);
 
-
+	
 	free(foster);
 	free(cam);
 	free(zach);

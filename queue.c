@@ -21,12 +21,6 @@ typedef void queue_t;
  */
 typedef struct elementstruct{
 	void *data; // an elementstruct 
-	//	void *data2;
-	//void *data3;
-	//void *arr[COUNT];
-	//for (int i = 0; i < COUNT; i++){
-	//	*arr[i] = data;
-	//}
 	struct elementstruct* next;
 } element_i;
 
@@ -36,9 +30,7 @@ typedef struct queuestruct{
 
 } queue_i;
 
-
 void* qget(queue_t *qp);
-
 
 /* create an empty queue 
  *return the front pointer 
@@ -71,91 +63,30 @@ void qclose(queue_t *qp){
   free(rp);
 }
 
-/*
-static void fillDataArr(element_i *elementp_i, element_i *elementp_t){
-	for (int i = 0; i < COUNT; i++){
-		elementp_i -> arr[i] = elementp_t -> arr[i];
-	}
-}
-*/
-/* put element at the end of the queue
- * returns 0 is successful; nonzero otherwise 
- */
 int32_t qput(queue_t *qp, void *elementp){
   queue_i* rp;
   rp = (queue_i*) qp;
-
-	
   element_i* elementp_i;
   element_i* elementp_t;
-  //	element_i *elementp_t; 
-  //	element_i *elementp_t;
-  //	elementp = 0;
-  //elementp = NULL;
-  //	elementp_i = (element_i*) elementp;
-  //elementp_i  = (element_i*)elementp;
-  //adjustStruct(elementp)
+  
   elementp_i = (element_i*)malloc(sizeof(element_i));
   elementp_t = (element_i*)elementp;
 	
-  // fill in data
-  //fillDataArr(elementp_i, elementp_t
-
-	
-  // need to allocate memory for the actual element object that is going into the queue
-
-  //elementp_i = (element_i*) elementp;
-
-
-	
-  /*
-  //copy array into new array of size 2 times greater, free old array, nd 
-  while (elementp_t->arr[COUNT+1] !=NULL){
-  COUNT = COUNT * 2;
-  elementp_i = (element_i*)malloc(sizeof(element_i));
-  elementp_t = (element_i*)elementp;
-  fillDataArr(elementp_i, elementp_t);
-  }
-  */
-  //	elementp_i ->arr[i] = elementp_t ->arr[i];
   elementp_i->data = elementp_t;
   elementp_i->next = NULL;
-  //elementp_t = elementp_i;
-	
-  //elementp_t ->data = elementp_i->data;
-  //elementp_t ->next = NULL;
-  //elementp_i ->next = NULL;
-  //elementp_t = elementp_i;
-  //	elementp_i = (element_i*)malloc(sizeof(element_i));
-  //	elementp_i ->next = NULL;
-  //void *front;
-  //void *back;
 
   //make element the front
   if (rp->front == NULL){
-    //elementp_i ->next = NULL;
-    //printf("front of list \n");
     rp->front = elementp_i;
     rp->back = elementp_i;
-    //		elementp_t ->data = elementp_i->data;
-    //elementp_t ->next = elementp_i->next;  
-    //rp->back->next = NULL;
-    //rp -> front -> next = NULL;
   }
-  //put the element in the back
-	
+  
+  //put the element in the back	
   else{
-    //printf("back of list \n");
-    //rp -> back = (element_i*)malloc(sizeof(element_i));
     rp -> back -> next = elementp_i;
     rp -> back = elementp_i;
-    //		rp ->back ->data = elementp_i ->data;
-		
-    //rp -> back = elementp_i ->next;
-    //		rp -> back -> next= NULL;
   }
-  //	printf("testing in qput, %
-  //free(elementp_i);
+
   return 0;
 }
 
@@ -185,27 +116,17 @@ void* qget(queue_t *qp){
 
 /* apply a function to every element of the queue */
 void qapply(queue_t *qp, void (*fn)(void* elementp)){
-	//	if (qp==NULL){
-	//	printf("queue is NULL");
-	//	return;
-	//}
 	element_i* currentElement;
 	void* currentElementV; 
 	queue_i *rp;
 	rp = (queue_i*) qp;
-	//printf("outside of for loop of qapply\n\n");
-	// make current Element equal to the specific queue's front element
-	//if(rp->front == NULL) printf("rp -> front is NULL\n\n");
+
 	currentElement= rp -> front;
 	while (currentElement!=NULL){
-		//		printf("applying function to element...");
-		//printf("currentElement %s = \n\n",currentElement->data);
 		currentElementV = currentElement->data;
 		if (currentElementV == NULL){
-			//			printf("element in queue supposed to be null %s", currentElement);
-			printf("warning: entered for loop but element is NULL! \n\n");
+       			printf("warning: entered for loop but element is NULL! \n\n");
 		}
-		//printf("element being applied to function... \n\n");
 		fn(currentElementV);
 		currentElement=currentElement->next;
 	}
@@ -221,47 +142,6 @@ void qapply(queue_t *qp, void (*fn)(void* elementp)){
  *          -- returns TRUE or FALSE as defined in bool.h
  * returns a pointer to an element, or NULL if not found
  */
-//static bool searchfn(void* elementp, const void* keyp){
-
-	// compare addresses of the two elements 
-//	if(elementp == keyp){
-//		return(TRUE);
-//	}else{
-//		return(FALSE);
-//	}
-//}
-/*
-static bool searchfn(void* elementp, const void* keyp){
-	element_i* elementp_i = NULL;
-	element_i* elementp_t = NULL;
-	element_i* elementp_i1 = NULL;
-	element_i* elementp_k = NULL;
-
-	// put the element and key into two different element structs and fill in the element struct's data accordingly
-	elementp_t = (element_i*) elementp;
-	elementp_i1 = (element_i*)keyp;
-	
-	elementp_i->data = elementp_t;
-	elementp_k->data = elementp_i1;
-	
-	
-  // compare addresses of the two elements                                                
-  if(elementp_i -> data  == elementp_k -> data){                                                           
-    return(true);                                                                       
-  }else{                                                                                
-    return(false);                                                                      
-  }                                                                                      
-} 
-*/
-/*static bool searchfn(void* elementp, const void* keyp){                        
-                                                                                
-// compare the two elements                                                     
-   if(elementp == keyp){                                                        
-     return(true);                                                              
-     }else{                                                                                                                                               
-    return(false);                                                              
-   }                                                                            
-	 } */  
 void* qsearch(queue_t *qp, 
 							bool (*searchfn)(void* elementp,const void* keyp),
 							const void* skeyp){
@@ -272,7 +152,6 @@ void* qsearch(queue_t *qp,
 	// for loop to go through each element in the list
 	for (p = rp->front; p != NULL; p=p->next){
 		//put in the data of the current element, skeyp should only be the data already
-		//p_i->data = p->data;
 		//compare elements in helper function
 		result = searchfn(p->data, skeyp);
 
@@ -319,12 +198,7 @@ void* qremove(queue_t *qp,
 			free(got);
 			return vp;
 		}
-		//		else{
-		//	printf("element not found");
-		//	return NULL;
-		//		}
-
-		// update back pointer
+	     	// update back pointer
 		prev = p;
 	}
 	printf("warning: no such element in queue\n");

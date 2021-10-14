@@ -24,8 +24,8 @@ ltest: ltest.o list.o
 qtest: qtest.o queue.o
 	gcc $(CFLAGS) qtest.o queue.o -o ${@}
 
-htest: htest.o hash.o
-	gcc $(CFLAGS) htest.o hash.o -o ${@}
+htest: htest.o hash.o queue.o
+	gcc $(CFLAGS) htest.o hash.o queue.o -o ${@}
 
 clean:
 	rm -f *.o ltest qtest htest

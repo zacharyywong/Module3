@@ -9,7 +9,7 @@
 #include <string.h>
 #include <queue.h>
 #include <hash.h>
-#include <queue.c>
+
 
 #define MAXCHAR 10
 #define MAXARR 2000
