@@ -12,7 +12,7 @@
 #include <queue.c>
 
 #define MAXCHAR 10
-#define MAXARR 10
+#define MAXARR 2000
 
 /* 
  * SuperFastHash() -- produces a number between 0 and the tablesize-1.

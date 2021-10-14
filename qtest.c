@@ -108,7 +108,7 @@ int main(){
 	person_t *sarah = make_person("sarah", 21, 2019, 504);
 	person_t *billie = make_person("billie", 18, 2026, 505);
 	
-	// open/apply/put functions
+	/*// open/apply/put functions
 	queue1 = qopen();
 	//qapply(queue1,print_person); //print on empty list
 	//printf("print before putting in queue \n");
@@ -193,11 +193,11 @@ int main(){
 	qapply(queue1, print_person);
 	
 	//close 
-	qclose(queue1);
+	qclose(queue1);*/
 	//	qclose(queue2);
 
 		
-	/*
+	
 	// testing seg faults
 	queue3 = qopen();
 	qget(queue3);
@@ -210,7 +210,9 @@ int main(){
 	qget(queue3);
 	qget(queue3);
 	qget(queue3);
-	printf("print after getting zach, foster, mikaela in queue3\n\n");                                       
+	qget(queue3);
+	qget(queue3);
+	printf("print after getting zach, foster, mikaela + 2 more times in queue3\n\n");                                       
   qapply(queue3, print_person);
 	
 	//testing concat 
@@ -280,14 +282,25 @@ int main(){
 	printf("printing resulting queue3 after removing sarah\n\n");
 	qapply(queue3, print_person); 
 
-
+	printf("removing mikaela (front) from queue3\n");
+	blank2 = (person_t*)qremove(queue3, searchfn, (void*)mikaela);
+	printf("printing resulting queue3 after removing mikaela\n\n");
+	qapply(queue3, print_person); 
 	
-
+	printf("removing foster (last item) from queue3\n");
+	blank3 = (person_t*)qremove(queue3, searchfn, (void*)foster);
+	printf("printing queue3 after removing foster, the last item\n");
+	qapply(queue3, print_person); 
+	
+	printf("trying to remove from an empty queue\n");
+	blank4 = (person_t*)qremove(queue3, searchfn, (void*)cam);
+	printf("printing queue3 after trying to remove from empty queue\n");
+	qapply(queue3, print_person); 
 
 	qclose(queue3);
 	//	qclose(queue4);
 
-	*/
+
 	free(foster);
 	free(cam);
 	free(zach);
